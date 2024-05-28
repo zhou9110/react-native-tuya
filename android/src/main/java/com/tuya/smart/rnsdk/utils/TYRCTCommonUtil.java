@@ -15,7 +15,7 @@ import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.tuya.smart.android.device.bean.SchemaBean;
+import com.thingclips.smart.android.device.bean.SchemaBean;
 
 
 import java.util.ArrayList;

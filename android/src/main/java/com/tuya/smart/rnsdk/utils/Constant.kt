@@ -1,7 +1,7 @@
 package com.tuya.smart.rnsdk.utils
 
 import com.facebook.react.bridge.Promise
-import com.tuya.smart.sdk.api.IResultCallback
+import com.thingclips.smart.sdk.api.IResultCallback
 
 object Constant {
 

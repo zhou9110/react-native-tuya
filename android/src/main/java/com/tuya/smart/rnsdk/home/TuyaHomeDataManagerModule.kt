@@ -1,7 +1,7 @@
 package com.tuya.smart.rnsdk.home
 
 import com.facebook.react.bridge.*
-import com.tuya.smart.home.sdk.TuyaHomeSdk
+import com.thingclips.smart.home.sdk.ThingHomeSdk
 import com.tuya.smart.rnsdk.utils.Constant.DEVID
 import com.tuya.smart.rnsdk.utils.Constant.GROUPID
 import com.tuya.smart.rnsdk.utils.Constant.HOMEID
@@ -22,7 +22,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun getHomeRoomList(params: ReadableMap, promise: Promise) {
         promise.resolve(TuyaReactUtils.parseToWritableArray(
-                JsonUtils.toJsonArray(TuyaHomeSdk.getDataInstance().getHomeRoomList(params.getDouble(HOMEID).toLong()))))
+                JsonUtils.toJsonArray(ThingHomeSdk.getDataInstance().getHomeRoomList(params.getDouble(HOMEID).toLong()))))
     }
 
 
@@ -31,7 +31,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     fun getHomeDeviceList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID), params)) {
             promise.resolve(TuyaReactUtils.parseToWritableArray(
-                    JsonUtils.toJsonArray(TuyaHomeSdk.getDataInstance().getHomeDeviceList(params.getDouble(HOMEID).toLong()))))
+                    JsonUtils.toJsonArray(ThingHomeSdk.getDataInstance().getHomeDeviceList(params.getDouble(HOMEID).toLong()))))
         }
     }
     /* 获取家庭下面的群组列表 */
@@ -39,7 +39,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     fun getHomeGroupList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID), params)) {
             promise.resolve(TuyaReactUtils.parseToWritableArray(
-                    JsonUtils.toJsonArray(TuyaHomeSdk.getDataInstance().getHomeGroupList(params.getDouble(HOMEID).toLong()))))
+                    JsonUtils.toJsonArray(ThingHomeSdk.getDataInstance().getHomeGroupList(params.getDouble(HOMEID).toLong()))))
         }
     }
 
@@ -47,7 +47,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun getGroupBean(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(GROUPID), params)) {
-            promise.resolve(TuyaReactUtils.parseToWritableMap(TuyaHomeSdk.getDataInstance().getGroupBean(params.getDouble(GROUPID).toLong())))
+            promise.resolve(TuyaReactUtils.parseToWritableMap(ThingHomeSdk.getDataInstance().getGroupBean(params.getDouble(GROUPID).toLong())))
         }
     }
 
@@ -55,7 +55,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun getDeviceBean(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            promise.resolve(TuyaReactUtils.parseToWritableMap(TuyaHomeSdk.getDataInstance().getDeviceBean(params.getString(DEVID))))
+            promise.resolve(TuyaReactUtils.parseToWritableMap(ThingHomeSdk.getDataInstance().getDeviceBean(params.getString(DEVID))))
         }
     }
 
@@ -63,7 +63,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun getGroupRoomBean(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(GROUPID), params)) {
-            promise.resolve(TuyaReactUtils.parseToWritableMap(TuyaHomeSdk.getDataInstance().getGroupRoomBean(params.getDouble(GROUPID).toLong())))
+            promise.resolve(TuyaReactUtils.parseToWritableMap(ThingHomeSdk.getDataInstance().getGroupRoomBean(params.getDouble(GROUPID).toLong())))
         }
     }
 
@@ -71,7 +71,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun getRoomBean(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(ROOMID), params)) {
-            promise.resolve(TuyaReactUtils.parseToWritableMap(TuyaHomeSdk.getDataInstance().getRoomBean(params.getDouble(ROOMID).toLong())))
+            promise.resolve(TuyaReactUtils.parseToWritableMap(ThingHomeSdk.getDataInstance().getRoomBean(params.getDouble(ROOMID).toLong())))
         }
     }
 
@@ -79,7 +79,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun getDeviceRoomBean(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            promise.resolve(TuyaReactUtils.parseToWritableMap(TuyaHomeSdk.getDataInstance().getDeviceRoomBean(params.getString(DEVID))))
+            promise.resolve(TuyaReactUtils.parseToWritableMap(ThingHomeSdk.getDataInstance().getDeviceRoomBean(params.getString(DEVID))))
         }
     }
 
@@ -88,7 +88,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     fun getGroupDeviceList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(GROUPID), params)) {
             promise.resolve(TuyaReactUtils.parseToWritableArray(
-                    JsonUtils.toJsonArray(TuyaHomeSdk.getDataInstance().getGroupDeviceList(params.getDouble(GROUPID).toLong()))))
+                    JsonUtils.toJsonArray(ThingHomeSdk.getDataInstance().getGroupDeviceList(params.getDouble(GROUPID).toLong()))))
         }
     }
 
@@ -97,7 +97,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     fun getMeshGroupList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(MESHID), params)) {
             promise.resolve(TuyaReactUtils.parseToWritableArray(
-                    JsonUtils.toJsonArray(TuyaHomeSdk.getDataInstance().getMeshGroupList(params.getString(MESHID)))))
+                    JsonUtils.toJsonArray(ThingHomeSdk.getDataInstance().getMeshGroupList(params.getString(MESHID)))))
         }
     }
 
@@ -105,7 +105,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     fun getMeshDeviceList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(MESHID), params)) {
             promise.resolve(TuyaReactUtils.parseToWritableArray(
-                    JsonUtils.toJsonArray(TuyaHomeSdk.getDataInstance().getMeshDeviceList(params.getString(MESHID)))))
+                    JsonUtils.toJsonArray(ThingHomeSdk.getDataInstance().getMeshDeviceList(params.getString(MESHID)))))
         }
     }
 
@@ -115,7 +115,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     fun getRoomDeviceList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(ROOMID), params)) {
             promise.resolve(TuyaReactUtils.parseToWritableArray(
-                    JsonUtils.toJsonArray(TuyaHomeSdk.getDataInstance().getRoomDeviceList(params.getDouble(ROOMID).toLong()))))
+                    JsonUtils.toJsonArray(ThingHomeSdk.getDataInstance().getRoomDeviceList(params.getDouble(ROOMID).toLong()))))
         }
     }
 
@@ -125,7 +125,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     fun getRoomGroupList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(ROOMID), params)) {
             promise.resolve(TuyaReactUtils.parseToWritableArray(
-                    JsonUtils.toJsonArray(TuyaHomeSdk.getDataInstance().getRoomGroupList(params.getDouble(ROOMID).toLong()))))
+                    JsonUtils.toJsonArray(ThingHomeSdk.getDataInstance().getRoomGroupList(params.getDouble(ROOMID).toLong()))))
         }
     }
 
@@ -133,7 +133,7 @@ class TuyaHomeDataManagerModule(reactContext: ReactApplicationContext) : ReactCo
     @ReactMethod
     fun getHomeBean(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID), params)) {
-            promise.resolve(TuyaReactUtils.parseToWritableMap(TuyaHomeSdk.getDataInstance().getHomeBean(params.getDouble(HOMEID).toLong())))
+            promise.resolve(TuyaReactUtils.parseToWritableMap(ThingHomeSdk.getDataInstance().getHomeBean(params.getDouble(HOMEID).toLong())))
         }
     }
 

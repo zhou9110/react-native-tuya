@@ -6,26 +6,22 @@ apply plugin: 'maven-publish'
 buildscript {
     ext.kotlin_version = '1.7.20'
     repositories {
-
-        maven {
-            url 'https://maven.aliyun.com/nexus/content/groups/public/'
-        }
         jcenter()
         google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:7.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 23
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -37,6 +33,10 @@ android {
         }
     }
 
+    packagingOptions {
+        pickFirst 'lib/*/libc++_shared.so'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -44,6 +44,14 @@ android {
         }
     }
 
+    compileOptions {
+      sourceCompatibility JavaVersion.VERSION_1_8
+      targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+configurations.all {
+  exclude group: "com.thingclips.smart", module: 'thingsmart-modularCampAnno'
 }
 
 dependencies {
@@ -51,7 +59,7 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.1.67.android'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.0'
-    implementation 'com.tuya.smart:tuyasmart:3.36.3'
+    implementation 'com.thingclips.smart:thingsmart:5.11.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.facebook.react:react-native:+'
     implementation 'de.greenrobot:eventbus:2.4.0'
@@ -60,14 +68,29 @@ dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 }
+
 repositories {
-    maven {
-        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-        url "$projectDir/../node_modules/react-native/android"
-    }
     mavenCentral()
     google()
-    maven {
-      url "https://maven-other.tuya.com/repository/maven-releases/"
+    maven { url 'https://maven-other.tuya.com/repository/maven-releases/' }
+    maven { url "https://maven-other.tuya.com/repository/maven-commercial-releases/" }
+    maven { url 'https://maven.aliyun.com/repository/public' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url 'https://developer.huawei.com/repo/' }
+    maven { url 'https://jitpack.io' }
+}
+
+allprojects {
+  repositories {
+    exclusiveContent {
+      filter {
+        includeGroup "com.facebook.react"
+      }
+      forRepository {
+        maven {
+          url "$rootDir/../node_modules/react-native/android"
+        }
+      }
     }
+  }
 }

@@ -3,10 +3,12 @@ package com.tuya.smart.rnsdk.device
 import android.util.Log
 import com.alibaba.fastjson.JSONObject
 import com.facebook.react.bridge.*
-import com.tuya.smart.android.device.api.IGetDataPointStatCallback
-import com.tuya.smart.android.device.bean.DataPointStatBean
-import com.tuya.smart.android.device.enums.DataPointTypeEnum
-import com.tuya.smart.home.sdk.TuyaHomeSdk
+import com.thingclips.smart.android.device.api.IGetDataPointStatCallback
+import com.thingclips.smart.android.device.bean.DataPointStatBean
+import com.thingclips.smart.android.device.enums.DataPointTypeEnum
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.sdk.api.IDevListener
+import com.thingclips.smart.sdk.api.IThingDevice
 import com.tuya.smart.rnsdk.utils.BridgeUtils
 import com.tuya.smart.rnsdk.utils.Constant.COMMAND
 import com.tuya.smart.rnsdk.utils.Constant.DATAPOINTTYPEENUM
@@ -18,13 +20,11 @@ import com.tuya.smart.rnsdk.utils.Constant.STARTTIME
 import com.tuya.smart.rnsdk.utils.Constant.getIResultCallback
 import com.tuya.smart.rnsdk.utils.ReactParamsCheck
 import com.tuya.smart.rnsdk.utils.TuyaReactUtils
-import com.tuya.smart.sdk.api.IDevListener
-import com.tuya.smart.sdk.api.ITuyaDevice
 
 
 class TuyaDeviceModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
-    var device: ITuyaDevice? = null
+    var device: IThingDevice? = null
 
     override fun getName(): String {
         return "TuyaDeviceModule"
@@ -40,7 +40,7 @@ class TuyaDeviceModule(reactContext: ReactApplicationContext) : ReactContextBase
     @ReactMethod
     fun getDeviceData(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            promise.resolve(TuyaReactUtils.parseToWritableMap(TuyaHomeSdk.getDataInstance().getDeviceBean(params.getString(DEVID))))
+            promise.resolve(TuyaReactUtils.parseToWritableMap(ThingHomeSdk.getDataInstance().getDeviceBean(params.getString(DEVID))))
         }
     }
 
@@ -174,8 +174,8 @@ class TuyaDeviceModule(reactContext: ReactApplicationContext) : ReactContextBase
     }
 
 
-    fun getDevice(devId: String): ITuyaDevice {
-        return TuyaHomeSdk.newDeviceInstance(devId);
+    fun getDevice(devId: String): IThingDevice {
+        return ThingHomeSdk.newDeviceInstance(devId);
     }
 
 }

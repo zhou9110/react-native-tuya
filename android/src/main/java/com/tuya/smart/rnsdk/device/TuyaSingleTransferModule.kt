@@ -1,14 +1,14 @@
 package com.tuya.smart.rnsdk.device
 
 import com.facebook.react.bridge.*
-import com.tuya.smart.home.sdk.TuyaHomeSdk
-import com.tuya.smart.home.sdk.bean.TransferDataBean
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.home.sdk.bean.TransferDataBean
+import com.thingclips.smart.sdk.api.IThingDataCallback
 import com.tuya.smart.rnsdk.utils.BridgeUtils
 import com.tuya.smart.rnsdk.utils.Constant
 import com.tuya.smart.rnsdk.utils.Constant.DEVID
 import com.tuya.smart.rnsdk.utils.ReactParamsCheck
 import com.tuya.smart.rnsdk.utils.TuyaReactUtils
-import com.tuya.smart.sdk.api.ITuyaDataCallback
 
 class TuyaSingleTransferModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     override fun getName(): String {
@@ -20,7 +20,7 @@ class TuyaSingleTransferModule(reactContext: ReactApplicationContext) : ReactCon
      */
     @ReactMethod
     fun startConnect() {
-       TuyaHomeSdk.getTransferInstance().startConnect()
+       ThingHomeSdk.getTransferInstance().startConnect()
     }
 
     /**
@@ -28,7 +28,7 @@ class TuyaSingleTransferModule(reactContext: ReactApplicationContext) : ReactCon
      */
     @ReactMethod
     fun isOnline(promise: Promise) {
-       promise.resolve(TuyaHomeSdk.getTransferInstance().isOnline)
+       promise.resolve(ThingHomeSdk.getTransferInstance().isOnline)
     }
 
     /**
@@ -37,7 +37,7 @@ class TuyaSingleTransferModule(reactContext: ReactApplicationContext) : ReactCon
     @ReactMethod
     fun subscribeDevice(params: ReadableMap) {
         if (ReactParamsCheck.checkParams(arrayOf(Constant.DEVID), params)) {
-            TuyaHomeSdk.getTransferInstance().subscribeDevice(params.getString(DEVID))
+            ThingHomeSdk.getTransferInstance().subscribeDevice(params.getString(DEVID))
         }
     }
 
@@ -48,14 +48,14 @@ class TuyaSingleTransferModule(reactContext: ReactApplicationContext) : ReactCon
     @ReactMethod
     fun unSubscribeDevice(params: ReadableMap) {
         if (ReactParamsCheck.checkParams(arrayOf(Constant.DEVID), params)) {
-            TuyaHomeSdk.getTransferInstance().unSubscribeDevice(params.getString(DEVID))
+            ThingHomeSdk.getTransferInstance().unSubscribeDevice(params.getString(DEVID))
         }
     }
 
     @ReactMethod
     fun registerTransferDataListener(params: ReadableMap) {
         if (ReactParamsCheck.checkParams(arrayOf(Constant.DEVID), params)) {
-            TuyaHomeSdk.getTransferInstance().registerTransferDataListener(object : ITuyaDataCallback<TransferDataBean>{
+            ThingHomeSdk.getTransferInstance().registerTransferDataListener(object : IThingDataCallback<TransferDataBean> {
                 override fun onSuccess(var1: TransferDataBean){
                     val map = Arguments.createMap()
                     map.putString("devId", params.getString(DEVID))
@@ -81,6 +81,6 @@ class TuyaSingleTransferModule(reactContext: ReactApplicationContext) : ReactCon
     }
     @ReactMethod
     fun stopConnect() {
-        TuyaHomeSdk.getTransferInstance().stopConnect()
+        ThingHomeSdk.getTransferInstance().stopConnect()
     }
 }

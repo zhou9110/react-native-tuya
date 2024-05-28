@@ -1,9 +1,12 @@
 package com.tuya.smart.rnsdk.group
 
 import com.facebook.react.bridge.*
-import com.tuya.smart.home.sdk.TuyaHomeSdk
-import com.tuya.smart.home.sdk.api.ITuyaHome
-import com.tuya.smart.home.sdk.callback.ITuyaResultCallback
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.home.sdk.api.IThingHome
+import com.thingclips.smart.home.sdk.callback.IThingResultCallback
+import com.thingclips.smart.sdk.api.IGroupListener
+import com.thingclips.smart.sdk.api.IThingGroup
+import com.thingclips.smart.sdk.bean.GroupDeviceBean
 import com.tuya.smart.rnsdk.utils.*
 import com.tuya.smart.rnsdk.utils.Constant.COMMAND
 import com.tuya.smart.rnsdk.utils.Constant.DEVIDS
@@ -12,8 +15,6 @@ import com.tuya.smart.rnsdk.utils.Constant.HOMEID
 import com.tuya.smart.rnsdk.utils.Constant.NAME
 import com.tuya.smart.rnsdk.utils.Constant.PRODUCTID
 import com.tuya.smart.rnsdk.utils.Constant.getIResultCallback
-import com.tuya.smart.sdk.api.*
-import com.tuya.smart.sdk.bean.GroupDeviceBean
 
 
 
@@ -32,7 +33,7 @@ class TuyaGroupModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
                             params.getString(NAME),
                             JsonUtils.parserArraybyMap(params.getArray(DEVIDS) as ReadableArray,
                                     String::class.java) as MutableList<String>?,
-                            object : ITuyaResultCallback<Long> {
+                            object : IThingResultCallback<Long> {
                                 override fun onSuccess(p0: Long) {
                                     promise.resolve(p0)
                                 }
@@ -52,7 +53,7 @@ class TuyaGroupModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     fun queryDeviceListToAddGroup(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID,PRODUCTID), params)) {
             getITuyaHome(params.getDouble(HOMEID).toLong()).queryDeviceListToAddGroup(params.getDouble(HOMEID).toLong(),params.getString(PRODUCTID),
-                    object : ITuyaResultCallback<List<GroupDeviceBean>>{
+                    object : IThingResultCallback<List<GroupDeviceBean>>{
                 override fun onSuccess(bizResult: List<GroupDeviceBean>) {
                     promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(bizResult)))
                 }
@@ -140,12 +141,12 @@ class TuyaGroupModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
         }
     }
 
-    fun getITuyaHome(homeId: Long): ITuyaHome{
-        return TuyaHomeSdk.newHomeInstance(homeId)
+    fun getITuyaHome(homeId: Long): IThingHome {
+        return ThingHomeSdk.newHomeInstance(homeId)
     }
 
-    fun getITuyaGroup(groupId: Long): ITuyaGroup{
-        return TuyaHomeSdk.newGroupInstance(groupId)
+    fun getITuyaGroup(groupId: Long): IThingGroup {
+        return ThingHomeSdk.newGroupInstance(groupId)
     }
 
 }

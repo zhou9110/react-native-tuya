@@ -1,4 +1,4 @@
-# @volst/react-native-tuya
+# @owowagency/react-native-tuya
 
 This is a fork of [TuyaInc/tuyasmart-home-sdk-react-native](https://github.com/TuyaInc/tuyasmart-home-sdk-react-native), fixing a lot of issues we came across and a better install guide. It also uses TypeScript. We use it currently in multiple projects for clients and it is stable.
 
@@ -15,7 +15,7 @@ Tuya Cloud HTTP API interface package
 ## Getting started
 
 ```
-npm install @volst/react-native-tuya
+npm install @owowagency/react-native-tuya
 ```
 
 This library contains native code which is automatically linked in React Native >= 0.59. For iOS, run `cd ios && pod install`.
@@ -104,7 +104,7 @@ Now you can actually use the methods in this package. Unfortunately I don't have
 To login with an existing account:
 
 ```js
-import { loginWithEmail } from '@volst/react-native-tuya';
+import { loginWithEmail } from '@owowagency/react-native-tuya';
 
 await loginWithEmail({
   countryCode: '+1',
@@ -116,7 +116,7 @@ await loginWithEmail({
 To register a new account you first need to validate the email address. And then actually register using the code in the email.
 
 ```js
-import { getRegisterEmailValidateCode, registerAccountWithEmail } from '@volst/react-native-tuya';
+import { getRegisterEmailValidateCode, registerAccountWithEmail } from '@owowagency/react-native-tuya';
 
 await getRegisterEmailValidateCode({
   countryCode: '+1',
@@ -136,7 +136,7 @@ await registerAccountWithEmail({
 To get the currently logged in user:
 
 ```js
-import { getCurrentUser } from '@volst/react-native-tuya';
+import { getCurrentUser } from '@owowagency/react-native-tuya';
 
 const user = await getCurrentUser();
 ```

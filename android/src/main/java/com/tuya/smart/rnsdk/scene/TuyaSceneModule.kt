@@ -3,16 +3,21 @@ package com.tuya.smart.rnsdk.scene
 import android.text.TextUtils
 import android.util.Log
 import com.facebook.react.bridge.*
-import com.tuya.smart.home.sdk.TuyaHomeSdk
-import com.tuya.smart.home.sdk.api.ITuyaHomeScene
-import com.tuya.smart.home.sdk.bean.scene.PlaceFacadeBean
-import com.tuya.smart.home.sdk.bean.scene.SceneBean
-import com.tuya.smart.home.sdk.bean.scene.SceneCondition
-import com.tuya.smart.home.sdk.bean.scene.SceneTask
-import com.tuya.smart.home.sdk.bean.scene.condition.ConditionListBean
-import com.tuya.smart.home.sdk.bean.scene.condition.rule.*
-import com.tuya.smart.home.sdk.bean.scene.dev.TaskListBean
-import com.tuya.smart.home.sdk.callback.ITuyaResultCallback
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.home.sdk.api.IThingHomeScene
+import com.thingclips.smart.home.sdk.bean.scene.PlaceFacadeBean
+import com.thingclips.smart.home.sdk.bean.scene.SceneBean
+import com.thingclips.smart.home.sdk.bean.scene.SceneCondition
+import com.thingclips.smart.home.sdk.bean.scene.SceneTask
+import com.thingclips.smart.home.sdk.bean.scene.condition.ConditionListBean
+import com.thingclips.smart.home.sdk.bean.scene.condition.rule.BoolRule
+import com.thingclips.smart.home.sdk.bean.scene.condition.rule.EnumRule
+import com.thingclips.smart.home.sdk.bean.scene.condition.rule.Rule
+import com.thingclips.smart.home.sdk.bean.scene.condition.rule.TimerRule
+import com.thingclips.smart.home.sdk.bean.scene.condition.rule.ValueRule
+import com.thingclips.smart.home.sdk.bean.scene.dev.TaskListBean
+import com.thingclips.smart.home.sdk.callback.IThingResultCallback
+import com.thingclips.smart.sdk.bean.DeviceBean
 import com.tuya.smart.rnsdk.utils.Constant
 import com.tuya.smart.rnsdk.utils.Constant.BACKGROUND
 import com.tuya.smart.rnsdk.utils.Constant.CITYID
@@ -49,9 +54,6 @@ import com.tuya.smart.rnsdk.utils.Constant.VALUE
 import com.tuya.smart.rnsdk.utils.JsonUtils
 import com.tuya.smart.rnsdk.utils.ReactParamsCheck
 import com.tuya.smart.rnsdk.utils.TuyaReactUtils
-import com.tuya.smart.sdk.api.IRequestCallback
-import com.tuya.smart.sdk.api.ITuyaDataCallback
-import com.tuya.smart.sdk.bean.DeviceBean
 import org.eclipse.paho.client.mqttv3.logging.LoggerFactory
 import java.util.*
 import java.util.stream.Stream
@@ -67,7 +69,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getSceneList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getSceneList(params.getDouble(HOMEID).toLong(), object : ITuyaResultCallback<List<SceneBean>> {
+            ThingHomeSdk.getSceneManagerInstance().getSceneList(params.getDouble(HOMEID).toLong(), object : IThingResultCallback<List<SceneBean>> {
                 override fun onSuccess(var1: List<SceneBean>) {
                     promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(var1!!)))
                 }
@@ -83,7 +85,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getConditionList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(SHOWFAHRENHEIT), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getConditionList(params.getBoolean(SHOWFAHRENHEIT), object : ITuyaResultCallback<List<ConditionListBean>> {
+            ThingHomeSdk.getSceneManagerInstance().getConditionList(params.getBoolean(SHOWFAHRENHEIT), object : IThingResultCallback<List<ConditionListBean>> {
                 override fun onSuccess(p0: List<ConditionListBean>) {
                     promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(p0!!)))
                 }
@@ -98,7 +100,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getConditionDevList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getConditionDevList(params.getDouble(HOMEID).toLong(), object : ITuyaResultCallback<List<DeviceBean>> {
+            ThingHomeSdk.getSceneManagerInstance().getConditionDevList(params.getDouble(HOMEID).toLong(), object : IThingResultCallback<List<DeviceBean>> {
                 override fun onSuccess(p0: List<DeviceBean>) {
                     promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(p0!!)))
                 }
@@ -113,7 +115,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getDeviceConditionOperationList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getDeviceConditionOperationList(params.getString(DEVID), object : ITuyaResultCallback<List<TaskListBean>> {
+            ThingHomeSdk.getSceneManagerInstance().getDeviceConditionOperationList(params.getString(DEVID), object : IThingResultCallback<List<TaskListBean>> {
                 override fun onSuccess(p0: List<TaskListBean>) {
                     promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(p0!!)))
                 }
@@ -128,7 +130,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getCityListByCountryCode(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(COUNTRYCODE), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getCityListByCountryCode(params.getString(COUNTRYCODE), object : ITuyaResultCallback<List<PlaceFacadeBean>> {
+            ThingHomeSdk.getSceneManagerInstance().getCityListByCountryCode(params.getString(COUNTRYCODE), object : IThingResultCallback<List<PlaceFacadeBean>> {
                 override fun onSuccess(p0: List<PlaceFacadeBean>) {
                     promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(p0!!)))
                 }
@@ -143,7 +145,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getCityByCityIndex(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(CITYID), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getCityByCityIndex(params.getDouble(CITYID).toLong(), object : ITuyaResultCallback<PlaceFacadeBean> {
+            ThingHomeSdk.getSceneManagerInstance().getCityByCityIndex(params.getDouble(CITYID).toLong(), object : IThingResultCallback<PlaceFacadeBean> {
                 override fun onSuccess(p0: PlaceFacadeBean) {
                     promise.resolve(TuyaReactUtils.parseToWritableMap(p0!!))
                 }
@@ -158,8 +160,8 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getCityByLatLng(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(LON, LAT), params)) {
-            TuyaHomeSdk.getSceneManagerInstance()
-                    .getCityByLatLng(params.getString(LON), params.getString(LAT), object : ITuyaResultCallback<PlaceFacadeBean> {
+            ThingHomeSdk.getSceneManagerInstance()
+                    .getCityByLatLng(params.getString(LON), params.getString(LAT), object : IThingResultCallback<PlaceFacadeBean> {
                         override fun onSuccess(p0: PlaceFacadeBean) {
                             promise.resolve(TuyaReactUtils.parseToWritableMap(p0!!))
                         }
@@ -181,8 +183,8 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getTaskDevList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getTaskDevList(params.getDouble(HOMEID).toLong(),
-                    object : ITuyaResultCallback<List<DeviceBean>> {
+            ThingHomeSdk.getSceneManagerInstance().getTaskDevList(params.getDouble(HOMEID).toLong(),
+                    object : IThingResultCallback<List<DeviceBean>> {
                         override fun onSuccess(var1: List<DeviceBean>) {
                             promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(var1!!)))
                         }
@@ -197,8 +199,8 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getDeviceTaskOperationList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            promise.resolve(TuyaHomeSdk.getSceneManagerInstance().getDeviceTaskOperationList(params.getString(DEVID),
-                    object : ITuyaResultCallback<List<TaskListBean>> {
+            promise.resolve(ThingHomeSdk.getSceneManagerInstance().getDeviceTaskOperationList(params.getString(DEVID),
+                    object : IThingResultCallback<List<TaskListBean>> {
                         override fun onSuccess(var1: List<TaskListBean>) {
                             promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(var1!!)))
                         }
@@ -225,7 +227,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
             } else if (params.getString(MATCHTYPE).equals("MATCH_TYPE_BY_EXPR")) {
                 mathType = SceneBean.MATCH_TYPE_BY_EXPR
             }
-            TuyaHomeSdk.getSceneManagerInstance().createScene(
+            ThingHomeSdk.getSceneManagerInstance().createScene(
                     params.getDouble(HOMEID).toLong(),//家庭id
                     params.getString(NAME), //场景名称
                     b,//是否显示首页
@@ -233,7 +235,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
                     null,//conditions 条件 场景就不要条件了 自动化要
                     tasks, //任务
                     mathType,
-                    object : ITuyaResultCallback<SceneBean> {
+                    object : IThingResultCallback<SceneBean> {
                         override fun onSuccess(sceneBean: SceneBean) {
                             promise.resolve(TuyaReactUtils.parseToWritableMap(sceneBean))
                         }
@@ -248,8 +250,8 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod  //修改已创建的场景 切勿创新的创景进来  //将创建的值都穿进来
     fun modifyScene(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(SCENEID, HOMEID, DEVIDS, TASKS, NAME, STICKYONTOP, MATCHTYPE), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getSceneList(params.getDouble(HOMEID).toLong(),
-                    object : ITuyaResultCallback<List<SceneBean>> {
+            ThingHomeSdk.getSceneManagerInstance().getSceneList(params.getDouble(HOMEID).toLong(),
+                    object : IThingResultCallback<List<SceneBean>> {
                         override fun onSuccess(p0: List<SceneBean>) {
                             for (item in p0) {
                                 if (item.id.equals(params.getString(SCENEID))) {
@@ -263,7 +265,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
 
                                     getScene(item.id)?.modifyScene(
                                             item, //修改后的场景数据类
-                                            object : ITuyaResultCallback<SceneBean> {
+                                            object : IThingResultCallback<SceneBean> {
                                                 override fun onSuccess(sceneBean: SceneBean) {
                                                     promise.resolve(TuyaReactUtils.parseToWritableMap(sceneBean))
                                                 }
@@ -334,7 +336,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
                 } else if (condition.getInt(ENTITY_TYPE) == ENTITY_TYPE_DEVICE) { //创建设备
                     var rules = ArrayList<Rule>()
                     rules.add(getRules(condition))
-                    val devCondition = SceneCondition.createDevCondition(TuyaHomeSdk.getDataInstance().getDeviceBean(condition.getString(DEVID)),
+                    val devCondition = SceneCondition.createDevCondition(ThingHomeSdk.getDataInstance().getDeviceBean(condition.getString(DEVID)),
                             condition.getString(DPID),
                             getRules(condition))
                     sceneConditionList.add(devCondition)
@@ -363,7 +365,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
 
                 k++
             }
-            TuyaHomeSdk.getSceneManagerInstance().createScene(
+            ThingHomeSdk.getSceneManagerInstance().createScene(
                     params.getDouble(HOMEID).toLong(),//家庭id
                     params.getString(NAME), //场景名称
                     b,//是否显示首页
@@ -371,7 +373,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
                     sceneConditionList,//conditions 条件 场景就不要条件了 自动化要
                     tasks, //任务
                     mathType,
-                    object : ITuyaResultCallback<SceneBean> {
+                    object : IThingResultCallback<SceneBean> {
                         override fun onSuccess(sceneBean: SceneBean) {
                             promise.resolve(TuyaReactUtils.parseToWritableMap(sceneBean))
                         }
@@ -409,8 +411,8 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun modifyAutoScene(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(SCENEID, HOMEID, DEVIDS, TASKS, NAME, STICKYONTOP, MATCHTYPE, CONDITIONLISTS), params)) {
-            TuyaHomeSdk.getSceneManagerInstance().getSceneList(params.getDouble(HOMEID).toLong(),
-                    object : ITuyaResultCallback<List<SceneBean>> {
+            ThingHomeSdk.getSceneManagerInstance().getSceneList(params.getDouble(HOMEID).toLong(),
+                    object : IThingResultCallback<List<SceneBean>> {
                         override fun onSuccess(p0: List<SceneBean>) {
                             for (item in p0) {
                                 if (item.id.equals(params.getString(SCENEID))) {
@@ -458,7 +460,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
                                         } else if (condition.getInt(ENTITY_TYPE) == ENTITY_TYPE_DEVICE) { //创建设备
                                             var rules = ArrayList<Rule>()
                                             rules.add(getRules(condition))
-                                            val devCondition = SceneCondition.createDevCondition(TuyaHomeSdk.getDataInstance().getDeviceBean(condition.getString(DEVID)),
+                                            val devCondition = SceneCondition.createDevCondition(ThingHomeSdk.getDataInstance().getDeviceBean(condition.getString(DEVID)),
                                                     condition.getString(DPID),
                                                     getRules(condition))
                                             sceneConditionList.add(devCondition)
@@ -478,7 +480,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
                                     item.conditions = sceneConditionList
                                     getScene(item.id)?.modifyScene(
                                             item, //修改后的场景数据类
-                                            object : ITuyaResultCallback<SceneBean> {
+                                            object : IThingResultCallback<SceneBean> {
                                                 override fun onSuccess(sceneBean: SceneBean) {
                                                     promise.resolve(TuyaReactUtils.parseToWritableMap(sceneBean))
                                                 }
@@ -545,7 +547,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
             for (index in 0..length) {
                 list.add((params.getArray(Constant.SCENEIDS) as ReadableArray).getString(index) as String)
             }
-            TuyaHomeSdk.getSceneManagerInstance().sortSceneList(
+            ThingHomeSdk.getSceneManagerInstance().sortSceneList(
                     params.getDouble(HOMEID).toLong(), //家庭列表
                     list, //场景id列表
                     Constant.getIResultCallback(promise))
@@ -555,7 +557,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
 
     @ReactMethod
     fun onDestroy(params: ReadableMap) {
-        TuyaHomeSdk.getSceneManagerInstance().onDestroy();
+        ThingHomeSdk.getSceneManagerInstance().onDestroy();
         if (ReactParamsCheck.checkParams(arrayOf(SCENEID), params)) {
             getScene(params.getString(SCENEID) as String)?.onDestroy()
         }
@@ -563,7 +565,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
 
 
     fun createTask(devids: String, tasks: HashMap<String, Any>): SceneTask {
-        return TuyaHomeSdk.getSceneManagerInstance().createDpTask(devids, tasks)
+        return ThingHomeSdk.getSceneManagerInstance().createDpTask(devids, tasks)
     }
 
     fun createTasks(params: ReadableMap): ArrayList<SceneTask> {
@@ -621,7 +623,7 @@ class TuyaSceneModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
         return enumRule
     }
 
-    fun getScene(scendId: String): ITuyaHomeScene? {
-        return TuyaHomeSdk.newSceneInstance(scendId);
+    fun getScene(scendId: String): IThingHomeScene? {
+        return ThingHomeSdk.newSceneInstance(scendId);
     }
 }

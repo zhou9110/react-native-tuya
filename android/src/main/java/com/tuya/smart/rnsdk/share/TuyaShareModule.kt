@@ -1,12 +1,11 @@
 package com.tuya.smart.rnsdk.share
 
-import android.util.Log
 import com.facebook.react.bridge.*
-import com.tuya.smart.home.sdk.TuyaHomeSdk
-import com.tuya.smart.home.sdk.bean.ShareReceivedUserDetailBean
-import com.tuya.smart.home.sdk.bean.ShareSentUserDetailBean
-import com.tuya.smart.home.sdk.bean.SharedUserInfoBean
-import com.tuya.smart.home.sdk.callback.ITuyaResultCallback
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.home.sdk.bean.ShareReceivedUserDetailBean
+import com.thingclips.smart.home.sdk.bean.ShareSentUserDetailBean
+import com.thingclips.smart.home.sdk.bean.SharedUserInfoBean
+import com.thingclips.smart.home.sdk.callback.IThingResultCallback
 import com.tuya.smart.rnsdk.utils.Constant
 import com.tuya.smart.rnsdk.utils.Constant.COUNTRYCODE
 import com.tuya.smart.rnsdk.utils.Constant.DEVID
@@ -20,7 +19,6 @@ import com.tuya.smart.rnsdk.utils.Constant.getIResultCallback
 import com.tuya.smart.rnsdk.utils.JsonUtils
 import com.tuya.smart.rnsdk.utils.ReactParamsCheck
 import com.tuya.smart.rnsdk.utils.TuyaReactUtils
-import com.tuya.smart.sdk.bean.ShareIdBean
 
 
 class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -41,7 +39,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
             for(index in 0..length){
                 list.add(newlist.get(index).toString())
             }
-            TuyaHomeSdk.getDeviceShareInstance().addShareWithHomeId(params.getDouble(HOMEID).toLong()
+            ThingHomeSdk.getDeviceShareInstance().addShareWithHomeId(params.getDouble(HOMEID).toLong()
                     , params.getString(COUNTRYCODE),
                     params.getString(USERACCOUNT),
                     list,
@@ -58,7 +56,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
             for (index in 0..length) {
                 list.add((params.getArray(Constant.DEVIDS) as ReadableArray).getString(index) as String)
             }
-            TuyaHomeSdk.getDeviceShareInstance().addShareWithMemberId(params.getDouble(MEMBERID).toLong(),
+            ThingHomeSdk.getDeviceShareInstance().addShareWithMemberId(params.getDouble(MEMBERID).toLong(),
                     list,
                     getIResultCallback(promise))
         }
@@ -67,7 +65,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun disableDevShare(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(MEMBERID, DEVID), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().disableDevShare(params.getString(DEVID), params.getDouble(MEMBERID).toLong(),
+            ThingHomeSdk.getDeviceShareInstance().disableDevShare(params.getString(DEVID), params.getDouble(MEMBERID).toLong(),
                     getIResultCallback(promise))
         }
     }
@@ -75,21 +73,21 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun queryUserShareList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().queryUserShareList(params.getDouble(HOMEID).toLong(),
+            ThingHomeSdk.getDeviceShareInstance().queryUserShareList(params.getDouble(HOMEID).toLong(),
                     getITuyaResultCallback(promise))
         }
     }
     /*查询收到分享关系列表*/
     @ReactMethod
     fun queryShareReceivedUserList(promise: Promise) {
-        TuyaHomeSdk.getDeviceShareInstance().queryShareReceivedUserList(
+        ThingHomeSdk.getDeviceShareInstance().queryShareReceivedUserList(
                 getITuyaResultCallback(promise))
     }
     /*查询指定设备的分享用户列表*/
     @ReactMethod
     fun queryDevShareUserList(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().queryDevShareUserList(params.getString(DEVID),
+            ThingHomeSdk.getDeviceShareInstance().queryDevShareUserList(params.getString(DEVID),
                     getITuyaResultCallback(promise))
         }
     }
@@ -97,7 +95,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun queryShareDevFromInfo(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().queryShareDevFromInfo(params.getString(DEVID),
+            ThingHomeSdk.getDeviceShareInstance().queryShareDevFromInfo(params.getString(DEVID),
                     getITuyaResultCallbackSingle(promise))
         }
     }
@@ -105,7 +103,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getUserShareInfo(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(MEMBERID), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().getUserShareInfo(
+            ThingHomeSdk.getDeviceShareInstance().getUserShareInfo(
                     params.getDouble(MEMBERID).toLong(),
                     getITuyaResultShareSentUserDetailBeanCallback(promise))
         }
@@ -116,9 +114,9 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getReceivedShareInfo(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(MEMBERID), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().getReceivedShareInfo(
+            ThingHomeSdk.getDeviceShareInstance().getReceivedShareInfo(
                     params.getDouble(MEMBERID).toLong(),
-                    object :  ITuyaResultCallback<ShareReceivedUserDetailBean> {
+                    object : IThingResultCallback<ShareReceivedUserDetailBean> {
                         override fun onSuccess(bean: ShareReceivedUserDetailBean) {
                             promise.resolve(TuyaReactUtils.parseToWritableMap(bean))
                         }
@@ -152,7 +150,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun removeUserShare(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(MEMBERID), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().removeUserShare(
+            ThingHomeSdk.getDeviceShareInstance().removeUserShare(
                     params.getDouble(MEMBERID).toLong(),
                     getIResultCallback(promise))
         }
@@ -162,7 +160,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun removeReceivedUserShare(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(MEMBERID), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().removeReceivedUserShare(
+            ThingHomeSdk.getDeviceShareInstance().removeReceivedUserShare(
                     params.getDouble(MEMBERID).toLong(),
                     getIResultCallback(promise))
         }
@@ -173,7 +171,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun removeReceivedDevShare(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().removeReceivedDevShare(
+            ThingHomeSdk.getDeviceShareInstance().removeReceivedDevShare(
                     params.getString(DEVID),
                     getIResultCallback(promise))
         }
@@ -182,7 +180,7 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun renameShareNickname(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(MEMBERID, NAME), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().renameShareNickname(
+            ThingHomeSdk.getDeviceShareInstance().renameShareNickname(
                     params.getDouble(MEMBERID).toLong(),
                     params.getString(NAME),
                     getIResultCallback(promise))
@@ -192,15 +190,15 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun renameReceivedShareNickname(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(MEMBERID, NAME), params)) {
-            TuyaHomeSdk.getDeviceShareInstance().renameReceivedShareNickname(
+            ThingHomeSdk.getDeviceShareInstance().renameReceivedShareNickname(
                     params.getDouble(MEMBERID).toLong(),
                     params.getString(NAME),
                     getIResultCallback(promise))
         }
     }
 
-    fun getITuyaResultCallback(promise: Promise):  ITuyaResultCallback<List<SharedUserInfoBean>> {
-        return object :  ITuyaResultCallback<List<SharedUserInfoBean>> {
+    fun getITuyaResultCallback(promise: Promise):  IThingResultCallback<List<SharedUserInfoBean>> {
+        return object :  IThingResultCallback<List<SharedUserInfoBean>> {
             override fun onSuccess(p0: List<SharedUserInfoBean>) {
                 promise.resolve(TuyaReactUtils.parseToWritableArray(
                         JsonUtils.toJsonArray(p0)))
@@ -212,8 +210,8 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
         }
     }
 
-    fun getITuyaResultCallbackSingle(promise: Promise):  ITuyaResultCallback<SharedUserInfoBean> {
-        return object :  ITuyaResultCallback<SharedUserInfoBean> {
+    fun getITuyaResultCallbackSingle(promise: Promise):  IThingResultCallback<SharedUserInfoBean> {
+        return object :  IThingResultCallback<SharedUserInfoBean> {
             override fun onSuccess(bean: SharedUserInfoBean) {
                 promise.resolve(TuyaReactUtils.parseToWritableMap(bean))
             }
@@ -224,8 +222,8 @@ class TuyaShareModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
         }
     }
 
-    fun getITuyaResultShareSentUserDetailBeanCallback(promise: Promise):  ITuyaResultCallback<ShareSentUserDetailBean> {
-        return object :  ITuyaResultCallback<ShareSentUserDetailBean> {
+    fun getITuyaResultShareSentUserDetailBeanCallback(promise: Promise):  IThingResultCallback<ShareSentUserDetailBean> {
+        return object :  IThingResultCallback<ShareSentUserDetailBean> {
             override fun onSuccess(bean: ShareSentUserDetailBean) {
                 promise.resolve(TuyaReactUtils.parseToWritableMap(bean))
             }
