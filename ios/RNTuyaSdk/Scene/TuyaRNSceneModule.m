@@ -7,12 +7,12 @@
 //
 
 #import "TuyaRNSceneModule.h"
-#import <TuyaSmartSceneKit/TuyaSmartSceneKit.h>
+#import <ThingSmartSceneKit/ThingSmartSceneKit.h>
 #import "TuyaRNUtils.h"
 #import "YYModel.h"
 
 @interface TuyaRNSceneModule()
-@property (nonatomic, strong) TuyaSmartScene *smartScene;
+@property (nonatomic, strong) ThingSmartScene *smartScene;
 @end
 
 @implementation TuyaRNSceneModule
@@ -29,10 +29,10 @@ RCT_EXPORT_METHOD(onDestory:(NSDictionary *)params) {
 
 //
 RCT_EXPORT_METHOD(getDeviceTaskOperationList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  [[TuyaSmartSceneManager sharedInstance] getSceneListWithHomeId:[params[@"homeId"] integerValue] success:^(NSArray<TuyaSmartSceneModel *> *list) {
+  [[ThingSmartSceneManager sharedInstance] getSceneListWithHomeId:[params[@"homeId"] integerValue] success:^(NSArray<ThingSmartSceneModel *> *list) {
     
     NSMutableArray *res = [NSMutableArray array];
-    for (TuyaSmartSceneModel *item in list) {
+    for (ThingSmartSceneModel *item in list) {
       NSDictionary *dic = [item yy_modelToJSONObject];
       [res addObject:dic];
     }
@@ -47,10 +47,10 @@ RCT_EXPORT_METHOD(getDeviceTaskOperationList:(NSDictionary *)params resolver:(RC
 
 // 获取场景列表,调试完毕：
 RCT_EXPORT_METHOD(getSceneList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    [[TuyaSmartSceneManager sharedInstance] getSceneListWithHomeId:[params[@"homeId"] integerValue] success:^(NSArray<TuyaSmartSceneModel *> *list) {
+    [[ThingSmartSceneManager sharedInstance] getSceneListWithHomeId:[params[@"homeId"] integerValue] success:^(NSArray<ThingSmartSceneModel *> *list) {
       
         NSMutableArray *res = [NSMutableArray array];
-        for (TuyaSmartSceneModel *item in list) {
+        for (ThingSmartSceneModel *item in list) {
           NSDictionary *dic = [item yy_modelToJSONObject];
           [res addObject:dic];
         }
@@ -65,10 +65,10 @@ RCT_EXPORT_METHOD(getSceneList:(NSDictionary *)params resolver:(RCTPromiseResolv
 
 // 获取条件列表,调试完毕：
 RCT_EXPORT_METHOD(getConditionList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    [[TuyaSmartSceneManager sharedInstance] getConditionListWithFahrenheit:YES success:^(NSArray<TuyaSmartSceneDPModel *> *list) {
+    [[ThingSmartSceneManager sharedInstance] getConditionListWithFahrenheit:YES success:^(NSArray<ThingSmartSceneDPModel *> *list) {
 
       NSMutableArray *res = [NSMutableArray array];
-      for (TuyaSmartSceneDPModel *item in list) {
+      for (ThingSmartSceneDPModel *item in list) {
         NSDictionary *dic = [item yy_modelToJSONObject];
         [res addObject:dic];
       }
@@ -82,9 +82,9 @@ RCT_EXPORT_METHOD(getConditionList:(NSDictionary *)params resolver:(RCTPromiseRe
 
 // 获取条件设备列表， 调试完毕：
 RCT_EXPORT_METHOD(getConditionDevList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    [[TuyaSmartSceneManager sharedInstance] getConditionDeviceListWithHomeId:[params[@"homeId"] integerValue] success:^(NSArray<TuyaSmartDeviceModel *> *list) {
+    [[ThingSmartSceneManager sharedInstance] getConditionDeviceListWithHomeId:[params[@"homeId"] integerValue] success:^(NSArray<ThingSmartDeviceModel *> *list) {
           NSMutableArray *res = [NSMutableArray array];
-          for (TuyaSmartDeviceModel *item in list) {
+          for (ThingSmartDeviceModel *item in list) {
             NSDictionary *dic = [item yy_modelToJSONObject];
             [res addObject:dic];
           }
@@ -101,10 +101,10 @@ RCT_EXPORT_METHOD(getConditionDevList:(NSDictionary *)params resolver:(RCTPromis
 // 根据设备id获取设备任务：
 RCT_EXPORT_METHOD(getDeviceConditionOperationList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-    [[TuyaSmartSceneManager sharedInstance] getActionDeviceDPListWithDevId:params[@"devId"] success:^(NSArray<TuyaSmartSceneDPModel *> *list) {
+    [[ThingSmartSceneManager sharedInstance] getActionDeviceDPListWithDevId:params[@"devId"] success:^(NSArray<ThingSmartSceneDPModel *> *list) {
       
         NSMutableArray *res = [NSMutableArray array];
-        for (TuyaSmartSceneDPModel *item in list) {
+        for (ThingSmartSceneDPModel *item in list) {
           NSMutableDictionary *dic = [item yy_modelToJSONObject];
           dic[@"name"] = item.dpModel.name;
           
@@ -133,7 +133,7 @@ RCT_EXPORT_METHOD(createAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
   
   NSMutableArray *conditionList = [NSMutableArray array];
   for(NSDictionary *item in params[@"conditionList"]) {
-    TuyaSmartSceneConditionModel *actionModel = [[TuyaSmartSceneConditionModel alloc] init];
+    ThingSmartSceneConditionModel *actionModel = [[ThingSmartSceneConditionModel alloc] init];
     // 天气：
     if([item[@"entityType"] integerValue] == 3) {
       //气象条件
@@ -159,7 +159,7 @@ RCT_EXPORT_METHOD(createAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
     else if([item[@"entityType"] integerValue] == 1) {
       //设备条件
       actionModel.entityId = item[@"devId"];
-      TuyaSmartDevice *device = [TuyaSmartDevice deviceWithDeviceId:item[@"devId"]];
+      ThingSmartDevice *device = [ThingSmartDevice deviceWithDeviceId:item[@"devId"]];
       actionModel.entityName = device.deviceModel.name;;
       actionModel.entitySubIds = [NSString stringWithFormat:@"%@", item[@"dpId"]];
       
@@ -171,7 +171,7 @@ RCT_EXPORT_METHOD(createAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
 
   NSMutableArray *actionList = [NSMutableArray array];
   for(NSDictionary *item in params[@"tasks"]) {
-    TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
+    ThingSmartSceneActionModel *actionModel = [[ThingSmartSceneActionModel alloc] init];
     actionModel.entityId = item[@"devId"];
     actionModel.executorProperty = @{[NSString stringWithFormat:@"%@", item[@"dpId"]]: item[@"value"], };
     actionModel.actionExecutor = @"dpIssue";
@@ -179,7 +179,7 @@ RCT_EXPORT_METHOD(createAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
   }
   
   
-  [TuyaSmartScene addNewSceneWithName:params[@"name"] homeId:[params[@"homeId"] longLongValue] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] preConditionList:params[@"preConditionList"] conditionList:conditionList actionList:actionList matchType:[params[@"matchType"] integerValue] success:^(TuyaSmartSceneModel *sceneModel) {
+  [ThingSmartScene addNewSceneWithName:params[@"name"] homeId:[params[@"homeId"] longLongValue] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] preConditionList:params[@"preConditionList"] conditionList:conditionList actionList:actionList matchType:[params[@"matchType"] integerValue] success:^(ThingSmartSceneModel *sceneModel) {
     if (resolver) {
       resolver([sceneModel yy_modelToJSONObject]);
     }
@@ -190,9 +190,9 @@ RCT_EXPORT_METHOD(createAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
 
 // 删除场景：
 RCT_EXPORT_METHOD(deleteScene:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  TuyaSmartSceneModel *model = [TuyaSmartSceneModel new];
+  ThingSmartSceneModel *model = [ThingSmartSceneModel new];
   model.sceneId = params[@"sceneId"];
-      self.smartScene = [TuyaSmartScene sceneWithSceneModel:model];
+      self.smartScene = [ThingSmartScene sceneWithSceneModel:model];
   [self.smartScene deleteSceneWithSuccess:^{
     if (resolver) {
       resolver(@"delete success");
@@ -205,9 +205,9 @@ RCT_EXPORT_METHOD(deleteScene:(NSDictionary *)params resolver:(RCTPromiseResolve
 
 // 执行场景：
 RCT_EXPORT_METHOD(executeScene:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  TuyaSmartSceneModel *model = [TuyaSmartSceneModel new];
+  ThingSmartSceneModel *model = [ThingSmartSceneModel new];
   model.sceneId = params[@"sceneId"];
-  self.smartScene = [TuyaSmartScene sceneWithSceneModel:model];
+  self.smartScene = [ThingSmartScene sceneWithSceneModel:model];
   [self.smartScene executeSceneWithSuccess:^{
     if (resolver) {
       resolver(@"execute success");
@@ -219,9 +219,9 @@ RCT_EXPORT_METHOD(executeScene:(NSDictionary *)params resolver:(RCTPromiseResolv
 
 // 开启场景：
 RCT_EXPORT_METHOD(enableScene:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  TuyaSmartSceneModel *model = [TuyaSmartSceneModel new];
+  ThingSmartSceneModel *model = [ThingSmartSceneModel new];
   model.sceneId = params[@"sceneId"];
-  self.smartScene = [TuyaSmartScene sceneWithSceneModel:model];
+  self.smartScene = [ThingSmartScene sceneWithSceneModel:model];
   [self.smartScene enableSceneWithSuccess:^{
     if (resolver) {
       resolver(@"enableSmartScene success");
@@ -233,9 +233,9 @@ RCT_EXPORT_METHOD(enableScene:(NSDictionary *)params resolver:(RCTPromiseResolve
 
 // 失效场景：
 RCT_EXPORT_METHOD(disableScene:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  TuyaSmartSceneModel *model = [TuyaSmartSceneModel new];
+  ThingSmartSceneModel *model = [ThingSmartSceneModel new];
   model.sceneId = params[@"sceneId"];
-  self.smartScene = [TuyaSmartScene sceneWithSceneModel:model];
+  self.smartScene = [ThingSmartScene sceneWithSceneModel:model];
   [self.smartScene disableSceneWithSuccess:^{
     if (resolver) {
       resolver(@"disableSmartScene success");
@@ -252,7 +252,7 @@ RCT_EXPORT_METHOD(createScene:(NSDictionary *)params resolver:(RCTPromiseResolve
   
   NSMutableArray *actionList = [NSMutableArray array];
   for(NSDictionary *item in params[@"tasks"]) {
-    TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
+    ThingSmartSceneActionModel *actionModel = [[ThingSmartSceneActionModel alloc] init];
     actionModel.entityId = item[@"devId"];
     actionModel.executorProperty = @{[NSString stringWithFormat:@"%@", item[@"dpId"]]: item[@"value"], };
     
@@ -262,7 +262,7 @@ RCT_EXPORT_METHOD(createScene:(NSDictionary *)params resolver:(RCTPromiseResolve
     [actionList addObject:actionModel];
   }
   
-  [TuyaSmartScene addNewSceneWithName:params[@"name"] homeId:[params[@"homeId"] longLongValue] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] preConditionList:params[@"preConditionList"] conditionList:params[@"conditionList"] actionList:actionList matchType:[params[@"matchType"] integerValue] success:^(TuyaSmartSceneModel *sceneModel) {
+  [ThingSmartScene addNewSceneWithName:params[@"name"] homeId:[params[@"homeId"] longLongValue] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] preConditionList:params[@"preConditionList"] conditionList:params[@"conditionList"] actionList:actionList matchType:[params[@"matchType"] integerValue] success:^(ThingSmartSceneModel *sceneModel) {
     if (resolver) {
       resolver([sceneModel yy_modelToJSONObject]);
     }
@@ -276,19 +276,19 @@ RCT_EXPORT_METHOD(modifyScene:(NSDictionary *)params resolver:(RCTPromiseResolve
   
   NSMutableArray *actionList = [NSMutableArray array];
   for(NSDictionary *item in params[@"tasks"]) {
-    TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
+    ThingSmartSceneActionModel *actionModel = [[ThingSmartSceneActionModel alloc] init];
     actionModel.entityId = item[@"devId"];
     actionModel.executorProperty = @{[NSString stringWithFormat:@"%@", item[@"dpId"]]: item[@"value"], };
     actionModel.actionExecutor = @"dpIssue";
     [actionList addObject:actionModel];
   }
   
-  TuyaSmartSceneModel *model = [TuyaSmartSceneModel new];
+  ThingSmartSceneModel *model = [ThingSmartSceneModel new];
   model.sceneId = params[@"sceneId"];
   model.actions = actionList;
   model.name = params[@"name"];
   
-  TuyaSmartScene *smartScene = [TuyaSmartScene sceneWithSceneModel:model];
+  ThingSmartScene *smartScene = [ThingSmartScene sceneWithSceneModel:model];
   self.smartScene = smartScene;
   [smartScene modifySceneWithName:params[@"name"] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] preConditionList:@[] conditionList:@[] actionList:actionList matchType:[params[@"matchType"] integerValue] success:^{
     if (resolver) {
@@ -306,14 +306,14 @@ RCT_EXPORT_METHOD(modifyAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
   
   NSMutableArray *actionList = [NSMutableArray array];
   for(NSDictionary *item in params[@"tasks"]) {
-    TuyaSmartSceneActionModel *actionModel = [[TuyaSmartSceneActionModel alloc] init];
+    ThingSmartSceneActionModel *actionModel = [[ThingSmartSceneActionModel alloc] init];
     actionModel.entityId = item[@"devId"];
     actionModel.executorProperty = @{[NSString stringWithFormat:@"%@", item[@"dpId"]]: item[@"value"], };
     actionModel.actionExecutor = @"dpIssue";
     [actionList addObject:actionModel];
   }
   
-  TuyaSmartSceneModel *model = [TuyaSmartSceneModel new];
+  ThingSmartSceneModel *model = [ThingSmartSceneModel new];
   model.sceneId = params[@"sceneId"];
   model.actions = actionList;
   model.name = params[@"name"];
@@ -321,7 +321,7 @@ RCT_EXPORT_METHOD(modifyAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
   
   NSMutableArray *conditionList = [NSMutableArray array];
   for(NSDictionary *item in params[@"conditionList"]) {
-    TuyaSmartSceneConditionModel *actionModel = [[TuyaSmartSceneConditionModel alloc] init];
+    ThingSmartSceneConditionModel *actionModel = [[ThingSmartSceneConditionModel alloc] init];
     // 天气：
     if([item[@"entityType"] integerValue] == 3) {
       //气象条件
@@ -345,7 +345,7 @@ RCT_EXPORT_METHOD(modifyAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
     else if([item[@"entityType"] integerValue] == 1) {
       //设备条件
       actionModel.entityId = item[@"devId"];
-      TuyaSmartDevice *device = [TuyaSmartDevice deviceWithDeviceId:item[@"devId"]];
+      ThingSmartDevice *device = [ThingSmartDevice deviceWithDeviceId:item[@"devId"]];
       actionModel.entityName = device.deviceModel.name;;
       actionModel.entitySubIds = [NSString stringWithFormat:@"%@", item[@"dpId"]];
       
@@ -354,7 +354,7 @@ RCT_EXPORT_METHOD(modifyAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
     }
   }
   
-  TuyaSmartScene *smartScene = [TuyaSmartScene sceneWithSceneModel:model];
+  ThingSmartScene *smartScene = [ThingSmartScene sceneWithSceneModel:model];
   self.smartScene = smartScene;
   [smartScene modifySceneWithName:params[@"name"] background:params[@"background"] showFirstPage:params[@"stickyOnTop"] preConditionList:@[] conditionList:conditionList actionList:actionList matchType:[params[@"matchType"] integerValue] success:^{
     if (resolver) {
@@ -369,10 +369,10 @@ RCT_EXPORT_METHOD(modifyAutoScene:(NSDictionary *)params resolver:(RCTPromiseRes
 
 // 获取城市列表, 调试通过：
 RCT_EXPORT_METHOD(getCityListByCountryCode:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  [[TuyaSmartSceneManager sharedInstance] getCityListWithCountryCode:params[@"countryCode"] success:^(NSArray<TuyaSmartCityModel *> *list) {
+  [[ThingSmartSceneManager sharedInstance] getCityListWithCountryCode:params[@"countryCode"] success:^(NSArray<ThingSmartCityModel *> *list) {
     
     NSMutableArray *res = [NSMutableArray array];
-    for (TuyaSmartCityModel *item in list) {
+    for (ThingSmartCityModel *item in list) {
       NSDictionary *dic = [item yy_modelToJSONObject];
       [res addObject:dic];
     }
@@ -388,7 +388,7 @@ RCT_EXPORT_METHOD(getCityListByCountryCode:(NSDictionary *)params resolver:(RCTP
 // 根据城市id获取城市信息：
 RCT_EXPORT_METHOD(getCityByCityIndex:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-    [[TuyaSmartSceneManager sharedInstance] getCityInfoWithCityId:params[@"cityId"] success:^(TuyaSmartCityModel *model) {
+    [[ThingSmartSceneManager sharedInstance] getCityInfoWithCityId:params[@"cityId"] success:^(ThingSmartCityModel *model) {
         if (resolver) {
           resolver([model yy_modelToJSONObject]);
         }
@@ -401,11 +401,11 @@ RCT_EXPORT_METHOD(getCityByCityIndex:(NSDictionary *)params resolver:(RCTPromise
 // 获取执行动作支持的设备列表：
 RCT_EXPORT_METHOD(getTaskDevList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
 
-  [[TuyaSmartSceneManager sharedInstance] getActionGroupListAndDeviceListWithHomeId:[params[@"homeId"] longLongValue] success:^(NSDictionary *dict) {
+  [[ThingSmartSceneManager sharedInstance] getActionGroupListAndDeviceListWithHomeId:[params[@"homeId"] longLongValue] success:^(NSDictionary *dict) {
     
     
     NSMutableArray *res = [NSMutableArray array];
-    for (TuyaSmartDeviceModel *item in dict[@"deviceList"]) {
+    for (ThingSmartDeviceModel *item in dict[@"deviceList"]) {
       NSDictionary *dic = [item yy_modelToJSONObject];
       [res addObject:dic];
     }
@@ -421,7 +421,7 @@ RCT_EXPORT_METHOD(getTaskDevList:(NSDictionary *)params resolver:(RCTPromiseReso
 // 场景排序：
 RCT_EXPORT_METHOD(sortSceneList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-  [[TuyaSmartSceneManager sharedInstance] sortSceneWithHomeId:[params[@"homeId"] longValue] sceneIdList:params[@"sceneIds"] success:^{
+  [[ThingSmartSceneManager sharedInstance] sortSceneWithHomeId:[params[@"homeId"] longValue] sceneIdList:params[@"sceneIds"] success:^{
     if (resolver) {
       resolver(@"sort success");
     }

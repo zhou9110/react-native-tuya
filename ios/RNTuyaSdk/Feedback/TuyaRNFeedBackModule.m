@@ -7,12 +7,12 @@
 //
 
 #import "TuyaRNFeedBackModule.h"
-#import <TuyaSmartFeedbackKit/TuyaSmartFeedbackKit.h>
+#import <ThingSmartFeedbackKit/ThingSmartFeedbackKit.h>
 #import "TuyaRNUtils.h"
 #import "YYModel.h"
 
 @interface TuyaRNFeedBackModule()
-@property (nonatomic, strong) TuyaSmartFeedback *smartFeedback;
+@property (nonatomic, strong) ThingSmartFeedback *smartFeedback;
 @end
 
 
@@ -26,11 +26,11 @@ RCT_EXPORT_METHOD(initWithOptions:(NSDictionary *)params) {
 
 // 获取反馈列表：
 RCT_EXPORT_METHOD(getFeedbackMsg:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartFeedback *feedBack = [[TuyaSmartFeedback alloc] init];
+    ThingSmartFeedback *feedBack = [[ThingSmartFeedback alloc] init];
   self.smartFeedback = feedBack;
-  [feedBack getFeedbackList:params[@"hdId"] hdType:[params[@"hdType"] unsignedIntegerValue] success:^(NSArray<TuyaSmartFeedbackModel *> *list) {
+  [feedBack getFeedbackList:params[@"hdId"] hdType:[params[@"hdType"] unsignedIntegerValue] success:^(NSArray<ThingSmartFeedbackModel *> *list) {
     NSMutableArray *res = [NSMutableArray array];
-    for (TuyaSmartFeedbackModel *item in list) {
+    for (ThingSmartFeedbackModel *item in list) {
       NSDictionary *dic = [item yy_modelToJSONObject];
       [res addObject:dic];
     }
@@ -47,12 +47,12 @@ RCT_EXPORT_METHOD(getFeedbackMsg:(NSDictionary *)params resolver:(RCTPromiseReso
 
 // 获取反馈类型列表：
 RCT_EXPORT_METHOD(getFeedbackType:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartFeedback *feedBack = [[TuyaSmartFeedback alloc] init];
+    ThingSmartFeedback *feedBack = [[ThingSmartFeedback alloc] init];
   self.smartFeedback = feedBack;
-    [feedBack getFeedbackTypeList:^(NSArray<TuyaSmartFeedbackTypeListModel *> *list) {
+    [feedBack getFeedbackTypeList:^(NSArray<ThingSmartFeedbackTypeListModel *> *list) {
       
       NSMutableArray *res = [NSMutableArray array];
-        for (TuyaSmartFeedbackTypeListModel *item in list) {
+        for (ThingSmartFeedbackTypeListModel *item in list) {
           NSDictionary *dic = [item yy_modelToJSONObject];
           [res addObject:dic];
         }
@@ -67,7 +67,7 @@ RCT_EXPORT_METHOD(getFeedbackType:(RCTPromiseResolveBlock)resolver rejecter:(RCT
 
 // 新增反馈：
 RCT_EXPORT_METHOD(addMsg:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  TuyaSmartFeedback *feedBack = [[TuyaSmartFeedback alloc] init];
+  ThingSmartFeedback *feedBack = [[ThingSmartFeedback alloc] init];
   self.smartFeedback = feedBack;
   [feedBack addFeedback:params[@"message"] hdId:params[@"hdId"] hdType:[params[@"hdType"] integerValue] contact:params[@"contact"] success:^{
       if (resolver) {
@@ -81,11 +81,11 @@ RCT_EXPORT_METHOD(addMsg:(NSDictionary *)params resolver:(RCTPromiseResolveBlock
 
 // 反馈消息管理：
 RCT_EXPORT_METHOD(getFeedbackList:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartFeedback *feedBack = [[TuyaSmartFeedback alloc] init];
+    ThingSmartFeedback *feedBack = [[ThingSmartFeedback alloc] init];
   self.smartFeedback = feedBack;
-    [feedBack getFeedbackTalkList:^(NSArray<TuyaSmartFeedbackTalkListModel *> *list) {
+    [feedBack getFeedbackTalkList:^(NSArray<ThingSmartFeedbackTalkListModel *> *list) {
       NSMutableArray *res = [NSMutableArray array];
-        for (TuyaSmartFeedbackTalkListModel *item in list) {
+        for (ThingSmartFeedbackTalkListModel *item in list) {
           NSDictionary *dic = [item yy_modelToJSONObject];
           [res addObject:dic];
         }

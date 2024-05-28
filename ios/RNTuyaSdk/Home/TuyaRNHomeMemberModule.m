@@ -9,8 +9,8 @@
 #import "TuyaRNHomeMemberModule.h"
 #import "TuyaRNUtils.h"
 #import "YYModel.h"
-#import <TuyaSmartDeviceKit/TuyaSmartHomeMember.h>
-#import <TuyaSmartDeviceKit/TuyaSmartHome.h>
+#import <ThingSmartDeviceKit/ThingSmartHomeMember.h>
+#import <ThingSmartDeviceKit/ThingSmartHome.h>
 
 #define kTuyaRNHomeMemberModuleHomeId @"homeId"
 #define kTuyaRNHomeMemberModuleCountryCode @"countryCode"
@@ -22,8 +22,8 @@
 
 @interface TuyaRNHomeMemberModule()
 
-@property (nonatomic, strong) TuyaSmartHomeMember *homeMember;
-@property (nonatomic, strong) TuyaSmartHome *smartHome;
+@property (nonatomic, strong) ThingSmartHomeMember *homeMember;
+@property (nonatomic, strong) ThingSmartHome *smartHome;
 
 @end
 
@@ -43,9 +43,9 @@ RCT_EXPORT_MODULE(TuyaHomeMemberModule)
 
 RCT_EXPORT_METHOD(addMember:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
 
-  TuyaSmartHome *smartHome = [self smartHomeWithParams:params];
+  ThingSmartHome *smartHome = [self smartHomeWithParams:params];
 
-  TuyaSmartHomeAddMemberRequestModel *requestModel = [[TuyaSmartHomeAddMemberRequestModel alloc] init];
+  ThingSmartHomeAddMemberRequestModel *requestModel = [[ThingSmartHomeAddMemberRequestModel alloc] init];
 
   NSString *name = params[kTuyaRNHomeMemberModuleName];
   NSString *userAccount = params[kTuyaRNHomeMemberModuleUserAccount];
@@ -56,7 +56,7 @@ RCT_EXPORT_METHOD(addMember:(NSDictionary *)params resolver:(RCTPromiseResolveBl
   requestModel.account = userAccount;
   requestModel.countryCode = countryCode;
   requestModel.autoAccept = NO;
-  requestModel.role = admin.boolValue ? TYHomeRoleType_Admin : TYHomeRoleType_Member;
+  requestModel.role = admin.boolValue ? ThingHomeRoleType_Admin : ThingHomeRoleType_Member;
 
   [smartHome addHomeMemberWithAddMemeberRequestModel:requestModel success:^(NSDictionary *dict) {
     if (resolver) {
@@ -94,10 +94,10 @@ RCT_EXPORT_METHOD(updateMember:(NSDictionary *)params resolver:(RCTPromiseResolv
   NSNumber *memberId = params[kTuyaRNHomeMemberModuleMemberId];
   NSString *admin = params[kTuyaRNHomeMemberModuleAdmin];
 
-  TuyaSmartHomeMemberRequestModel *requestModel = [[TuyaSmartHomeMemberRequestModel alloc] init];
+  ThingSmartHomeMemberRequestModel *requestModel = [[ThingSmartHomeMemberRequestModel alloc] init];
   requestModel.memberId = memberId.longLongValue;
   requestModel.name = params[kTuyaRNHomeMemberModuleName];
-  requestModel.role = admin.boolValue ? TYHomeRoleType_Admin : TYHomeRoleType_Member;
+  requestModel.role = admin.boolValue ? ThingHomeRoleType_Admin : ThingHomeRoleType_Member;
 
   [self.homeMember updateHomeMemberInfoWithMemberRequestModel:requestModel success:^{
     [TuyaRNUtils resolverWithHandler:resolver];
@@ -113,7 +113,7 @@ RCT_EXPORT_METHOD(updateMember:(NSDictionary *)params resolver:(RCTPromiseResolv
 RCT_EXPORT_METHOD(queryMemberList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
 
   self.smartHome = [self smartHomeWithParams:params];
-  [self.smartHome getHomeMemberListWithSuccess:^(NSArray<TuyaSmartHomeMemberModel *> *memberList) {
+  [self.smartHome getHomeMemberListWithSuccess:^(NSArray<ThingSmartHomeMemberModel *> *memberList) {
     if (memberList.count == 0) {
       if (resolver) {
         resolver(@[]);
@@ -121,7 +121,7 @@ RCT_EXPORT_METHOD(queryMemberList:(NSDictionary *)params resolver:(RCTPromiseRes
       return;
     }
     NSMutableArray *memberDicList = [NSMutableArray array];
-    for (TuyaSmartHomeMemberModel *memberModel in memberList) {
+    for (ThingSmartHomeMemberModel *memberModel in memberList) {
       NSDictionary *dic = [memberModel yy_modelToJSONObject];
       if (dic) {
         [memberDicList addObject:dic];
@@ -138,14 +138,14 @@ RCT_EXPORT_METHOD(queryMemberList:(NSDictionary *)params resolver:(RCTPromiseRes
 
 #pragma mark -
 #pragma mark - init
-- (TuyaSmartHome *)smartHomeWithParams:(NSDictionary *)params {
+- (ThingSmartHome *)smartHomeWithParams:(NSDictionary *)params {
   long long homeId = ((NSNumber *)params[kTuyaRNHomeMemberModuleHomeId]).longLongValue;
-  return [TuyaSmartHome homeWithHomeId:homeId];
+  return [ThingSmartHome homeWithHomeId:homeId];
 }
 
-- (TuyaSmartHomeMember *)homeMember {
+- (ThingSmartHomeMember *)homeMember {
   if (!_homeMember) {
-    _homeMember = [[TuyaSmartHomeMember alloc] init];
+    _homeMember = [[ThingSmartHomeMember alloc] init];
   }
   return _homeMember;
 }

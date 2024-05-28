@@ -7,17 +7,17 @@
 //
 
 #import "TuyaRNHomeListener.h"
-#import <TuyaSmartDeviceKit/TuyaSmartHome.h>
-#import <TuyaSmartDeviceKit/TuyaSmartHomeManager.h>
+#import <ThingSmartDeviceKit/ThingSmartHome.h>
+#import <ThingSmartDeviceKit/ThingSmartHomeManager.h>
 #import "TuyaRNEventEmitter.h"
-#import <TuyaSmartDeviceKit/TuyaSmartRoomModel.h>
-#import <TuyaSmartDeviceKit/TuyaSmartShareDeviceModel.h>
-#import <TuyaSmartDeviceKit/TuyaSmartGroup+DpCode.h>
+#import <ThingSmartDeviceKit/ThingSmartRoomModel.h>
+#import <ThingSmartDeviceKit/ThingSmartShareDeviceModel.h>
+#import <ThingSmartDeviceKit/ThingSmartGroup+DpCode.h>
 
-@interface TuyaRNHomeListener()<TuyaSmartHomeDelegate>
+@interface TuyaRNHomeListener()<ThingSmartHomeDelegate>
 
-@property (strong, nonatomic) TuyaSmartHome *homeChangeSmartHome;
-@property (strong, nonatomic) TuyaSmartHome *homeStatusSmartHome;
+@property (strong, nonatomic) ThingSmartHome *homeChangeSmartHome;
+@property (strong, nonatomic) ThingSmartHome *homeStatusSmartHome;
 
 @end
 
@@ -32,7 +32,7 @@
   return _instance;
 }
 
-- (void)registerHomeChangeWithSmartHome:(TuyaSmartHome *)smartHome {
+- (void)registerHomeChangeWithSmartHome:(ThingSmartHome *)smartHome {
 
   if (!smartHome) {
     return;
@@ -48,7 +48,7 @@
 
 }
 
-- (void)registerHomeStatusWithSmartHome:(TuyaSmartHome *)smartHome {
+- (void)registerHomeStatusWithSmartHome:(ThingSmartHome *)smartHome {
 
   if (!smartHome) {
     return;
@@ -65,10 +65,10 @@
 }
 
 
-#pragma mark - TuyaSmartHomeDelegate
+#pragma mark - ThingSmartHomeDelegate
 
 // 家庭的信息更新，例如name
-- (void)homeDidUpdateInfo:(TuyaSmartHome *)home {
+- (void)homeDidUpdateInfo:(ThingSmartHome *)home {
 
   if (!self.homeChangeSmartHome) {
     return;
@@ -85,7 +85,7 @@
 }
 
 // 我收到的共享设备列表变化
-- (void)homeDidUpdateSharedInfo:(TuyaSmartHome *)home {
+- (void)homeDidUpdateSharedInfo:(ThingSmartHome *)home {
 
   if (!self.homeChangeSmartHome) {
     return;
@@ -102,7 +102,7 @@
 }
 
 // 房间信息变更，例如name
-- (void)home:(TuyaSmartHome *)home roomInfoUpdate:(TuyaSmartRoomModel *)room {
+- (void)home:(ThingSmartHome *)home roomInfoUpdate:(ThingSmartRoomModel *)room {
 
   if (!self.homeChangeSmartHome) {
     return;
@@ -121,12 +121,12 @@
 }
 
 // 房间与设备，群组的关系变化
-- (void)home:(TuyaSmartHome *)home roomRelationUpdate:(TuyaSmartRoomModel *)room {
+- (void)home:(ThingSmartHome *)home roomRelationUpdate:(ThingSmartRoomModel *)room {
 
 }
 
 // 添加设备
-- (void)home:(TuyaSmartHome *)home didAddDeivice:(TuyaSmartDeviceModel *)device {
+- (void)home:(ThingSmartHome *)home didAddDeivice:(ThingSmartDeviceModel *)device {
 
   if (!self.homeStatusSmartHome) {
     return;
@@ -142,7 +142,7 @@
 }
 
 // 删除设备
-- (void)home:(TuyaSmartHome *)home didRemoveDeivice:(NSString *)devId {
+- (void)home:(ThingSmartHome *)home didRemoveDeivice:(NSString *)devId {
 
   if (!self.homeStatusSmartHome) {
     return;
@@ -157,17 +157,17 @@
 }
 
 // 设备信息更新，例如name
-- (void)home:(TuyaSmartHome *)home deviceInfoUpdate:(TuyaSmartDeviceModel *)device {
+- (void)home:(ThingSmartHome *)home deviceInfoUpdate:(ThingSmartDeviceModel *)device {
 
 }
 
 // 设备dp数据更新
-- (void)home:(TuyaSmartHome *)home device:(TuyaSmartDeviceModel *)device dpsUpdate:(NSDictionary *)dps {
+- (void)home:(ThingSmartHome *)home device:(ThingSmartDeviceModel *)device dpsUpdate:(NSDictionary *)dps {
 
 }
 
 // 添加群组
-- (void)home:(TuyaSmartHome *)home didAddGroup:(TuyaSmartGroupModel *)group {
+- (void)home:(ThingSmartHome *)home didAddGroup:(ThingSmartGroupModel *)group {
   if (!self.homeStatusSmartHome) {
     return;
   }
@@ -180,7 +180,7 @@
 }
 
 // 群组dp数据更新
-- (void)home:(TuyaSmartHome *)home group:(TuyaSmartGroupModel *)group dpsUpdate:(NSDictionary *)dps {
+- (void)home:(ThingSmartHome *)home group:(ThingSmartGroupModel *)group dpsUpdate:(NSDictionary *)dps {
   if (!self.homeStatusSmartHome || !dps ||  dps.count == 0) {
     return;
   }
@@ -194,7 +194,7 @@
 }
 
 // 删除群组
-- (void)home:(TuyaSmartHome *)home didRemoveGroup:(NSString *)groupId {
+- (void)home:(ThingSmartHome *)home didRemoveGroup:(NSString *)groupId {
   if (!self.homeStatusSmartHome) {
     return;
   }
@@ -207,7 +207,7 @@
 }
 
 // 群组信息更新，例如name
-- (void)home:(TuyaSmartHome *)home groupInfoUpdate:(TuyaSmartGroupModel *)group {
+- (void)home:(ThingSmartHome *)home groupInfoUpdate:(ThingSmartGroupModel *)group {
   if (!self.homeStatusSmartHome) {
     return;
   }

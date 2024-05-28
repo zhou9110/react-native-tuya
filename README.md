@@ -31,17 +31,17 @@ Put the secure image into the root path of your project as [explained here](http
 In `ios/AppDelegate.m`, add the following import;
 
 ```obj-c
-#import <TuyaSmartHomeKit/TuyaSmartKit.h>
+#import <ThingSmartHomeKit/ThingSmartKit.h>
 ```
 
 Then, under the `roootView.backgroundColor` line in the same file, add this:
 
 ```obj-c
   #ifdef DEBUG
-    [[TuyaSmartSDK sharedInstance] setDebugMode:YES];
+    [[ThingSmartSDK sharedInstance] setDebugMode:YES];
   #endif
 
-  [[TuyaSmartSDK sharedInstance] startWithAppKey:@"xxx" secretKey:@"xxx"];
+  [[ThingSmartSDK sharedInstance] startWithAppKey:@"xxx" secretKey:@"xxx"];
 ```
 
 Now replace the `xxx` with your app key and secret key.

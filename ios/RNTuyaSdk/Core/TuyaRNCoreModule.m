@@ -7,7 +7,7 @@
 //
 
 #import "TuyaRNCoreModule.h"
-#import <TuyaSmartBaseKit/TuyaSmartBaseKit.h>
+#import <ThingSmartBaseKit/ThingSmartBaseKit.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
@@ -67,12 +67,12 @@ RCT_REMAP_METHOD(apiRequest,
   NSDictionary *postData  = [parameters objectForKey:@"postData"];
   NSString *version       = [parameters objectForKey:@"version"];
   
-  TuyaSmartRequest *request = [TuyaSmartRequest new];
+  ThingSmartRequest *request = [ThingSmartRequest new];
   
   [request requestWithApiName:apiName postData:postData version:version success:^(id result) {
     if ([result isKindOfClass:[NSDictionary class]] || [result isKindOfClass:[NSArray class]]) {
       if (resolver) {
-        resolver([result tysdk_JSONString]);
+        resolver([result thingsdk_JSONString]);
       }
     } else {
       if (resolver) {
@@ -106,8 +106,8 @@ RCT_EXPORT_METHOD(setLocation:(NSDictionary *)params) {
   NSString *lon = params[kTuyaCoreModuleParamLon];
   if ([lat isKindOfClass:[NSString class]] && lat.length > 0
       && [lon isKindOfClass:[NSString class]] && lon.length > 0) {
-    [[TuyaSmartSDK sharedInstance] setValue:lat forKey:@"latitude"];
-    [[TuyaSmartSDK sharedInstance] setValue:lon forKey:@"longitude"];
+    [[ThingSmartSDK sharedInstance] setValue:lat forKey:@"latitude"];
+    [[ThingSmartSDK sharedInstance] setValue:lon forKey:@"longitude"];
     [self.locationManager stopUpdatingLocation];
   }
 }

@@ -7,7 +7,7 @@
 //
 
 #import "TuyaRNGroupModule.h"
-#import <TuyaSmartDeviceKit/TuyaSmartDeviceKit.h>
+#import <ThingSmartDeviceKit/ThingSmartDeviceKit.h>
 #import "TuyaRNUtils.h"
 #import <YYModel.h>
 
@@ -28,7 +28,7 @@ RCT_EXPORT_METHOD(onDestory:(NSDictionary *)params) {
 
 // 创建群组：
 RCT_EXPORT_METHOD(createGroup:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-      [TuyaSmartGroup createGroupWithName:params[@"name"] productId:params[@"productId"] homeId:[params[@"homeId"] integerValue] devIdList:params[@"devIds"] success:^(TuyaSmartGroup *group) {
+      [ThingSmartGroup createGroupWithName:params[@"name"] productId:params[@"productId"] homeId:[params[@"homeId"] integerValue] devIdList:params[@"devIds"] success:^(ThingSmartGroup *group) {
           if (resolver) {
             resolver([group yy_modelToJSONObject]);
           }
@@ -40,9 +40,9 @@ RCT_EXPORT_METHOD(createGroup:(NSDictionary *)params resolver:(RCTPromiseResolve
 
 // 群组列表获取：
 RCT_EXPORT_METHOD(queryDeviceListToAddGroup:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    [TuyaSmartGroup getDevList:params[@"productId"] homeId:[params[@"homeId"] integerValue] success:^(NSArray<TuyaSmartGroupDevListModel *> *list) {
+    [ThingSmartGroup getDevList:params[@"productId"] homeId:[params[@"homeId"] integerValue] success:^(NSArray<ThingSmartGroupDevListModel *> *list) {
       NSMutableArray *res = [NSMutableArray array];
-      for (TuyaSmartGroupDevListModel *item in list) {
+      for (ThingSmartGroupDevListModel *item in list) {
         NSDictionary *dic = [item yy_modelToJSONObject];
         [res addObject:dic];
       }
@@ -56,7 +56,7 @@ RCT_EXPORT_METHOD(queryDeviceListToAddGroup:(NSDictionary *)params resolver:(RCT
 
 // 群组修改名称：
 RCT_EXPORT_METHOD(updateGroupName:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartGroup *smartGroup = [TuyaSmartGroup groupWithGroupId:params[@"groupID"]];
+    ThingSmartGroup *smartGroup = [ThingSmartGroup groupWithGroupId:params[@"groupID"]];
     [smartGroup updateGroupName:params[@"name"] success:^{
         if (resolver) {
           resolver(@"success");
@@ -68,7 +68,7 @@ RCT_EXPORT_METHOD(updateGroupName:(NSDictionary *)params resolver:(RCTPromiseRes
 
 // 解散群组：
 RCT_EXPORT_METHOD(dismissGroup:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartGroup *smartGroup = [TuyaSmartGroup groupWithGroupId:params[@"groupID"]];
+    ThingSmartGroup *smartGroup = [ThingSmartGroup groupWithGroupId:params[@"groupID"]];
     [smartGroup dismissGroup:^{
         if (resolver) {
           resolver(@"success");
@@ -81,7 +81,7 @@ RCT_EXPORT_METHOD(dismissGroup:(NSDictionary *)params resolver:(RCTPromiseResolv
 
 // 发送群组控制命令：
 RCT_EXPORT_METHOD(publishDps:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartGroup *smartGroup = [TuyaSmartGroup groupWithGroupId:params[@"groupID"]];
+    ThingSmartGroup *smartGroup = [ThingSmartGroup groupWithGroupId:params[@"groupID"]];
     NSDictionary *dps = @{@"1": @(YES)};
     [smartGroup publishDps:dps success:^{
         if (resolver) {

@@ -8,7 +8,7 @@
 
 #import "TuyaRNDeviceModule.h"
 #import "TuyaRNDeviceListener.h"
-#import <TuyaSmartDeviceKit/TuyaSmartDeviceKit.h>
+#import <ThingSmartDeviceKit/ThingSmartDeviceKit.h>
 #import "TuyaRNUtils.h"
 #import "YYModel.h"
 
@@ -20,7 +20,7 @@
 
 @interface TuyaRNDeviceModule()
 
-@property (strong, nonatomic) TuyaSmartDevice *smartDevice;
+@property (strong, nonatomic) ThingSmartDevice *smartDevice;
 
 @end
 
@@ -48,7 +48,7 @@ RCT_EXPORT_METHOD(unRegisterDevListener:(NSDictionary *)params resolver:(RCTProm
     return;
   }
 
-  TuyaSmartDevice *device = [TuyaSmartDevice deviceWithDeviceId:deviceId];
+  ThingSmartDevice *device = [ThingSmartDevice deviceWithDeviceId:deviceId];
 
   // 移除监听设备
   [TuyaRNDeviceListener removeDevice:device type:TuyaRNDeviceListenType_DeviceInfo];
@@ -155,7 +155,7 @@ RCT_EXPORT_METHOD(onDestroy:(NSDictionary *)params resolver:(RCTPromiseResolveBl
 
 // 下发升级指令：
 RCT_EXPORT_METHOD(startOta:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartDevice *device = [TuyaSmartDevice deviceWithDeviceId:params[@"devId"]];
+    ThingSmartDevice *device = [ThingSmartDevice deviceWithDeviceId:params[@"devId"]];
     [device upgradeFirmware:[params[@"type"] integerValue] success:^{
         if (resolver) {
           resolver(@"success");
@@ -168,11 +168,11 @@ RCT_EXPORT_METHOD(startOta:(NSDictionary *)params resolver:(RCTPromiseResolveBlo
 // 查询固件升级信息：
 RCT_EXPORT_METHOD(getOtaInfo:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
 
-    TuyaSmartDevice *device = [TuyaSmartDevice deviceWithDeviceId:params[@"devId"]];
-    [device getFirmwareUpgradeInfo:^(NSArray<TuyaSmartFirmwareUpgradeModel *> *upgradeModelList) {
+    ThingSmartDevice *device = [ThingSmartDevice deviceWithDeviceId:params[@"devId"]];
+    [device getFirmwareUpgradeInfo:^(NSArray<ThingSmartFirmwareUpgradeModel *> *upgradeModelList) {
 
         NSMutableArray *res = [NSMutableArray array];
-        for (TuyaSmartFirmwareUpgradeModel *item in upgradeModelList) {
+        for (ThingSmartFirmwareUpgradeModel *item in upgradeModelList) {
           NSDictionary *dic = [item yy_modelToJSONObject];
           [res addObject:dic];
         }
@@ -189,12 +189,12 @@ RCT_EXPORT_METHOD(getOtaInfo:(NSDictionary *)params resolver:(RCTPromiseResolveB
 
 
 #pragma mark -
-- (TuyaSmartDevice *)smartDeviceWithParams:(NSDictionary *)params {
+- (ThingSmartDevice *)smartDeviceWithParams:(NSDictionary *)params {
   NSString *deviceId = params[kTuyaDeviceModuleDevId];
   if(deviceId.length == 0) {
     return nil;
   }
-  return [TuyaSmartDevice deviceWithDeviceId:deviceId];
+  return [ThingSmartDevice deviceWithDeviceId:deviceId];
 }
 
 

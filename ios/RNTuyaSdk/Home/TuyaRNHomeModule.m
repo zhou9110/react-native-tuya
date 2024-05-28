@@ -9,12 +9,12 @@
 #import "TuyaRNHomeModule.h"
 #import "YYModel.h"
 #import "TuyaRNUtils.h"
-#import <TuyaSmartDeviceKit/TuyaSmartHome.h>
-#import <TuyaSmartDeviceKit/TuyaSmartHomeModel.h>
-#import <TuyaSmartDeviceKit/TuyaSmartShareDeviceModel.h>
-#import <TuyaSmartDeviceKit/TuyaSmartGroup+DpCode.h>
-#import <TuyaSmartBaseKit/TuyaSmartRequest.h>
-#import <TuyaSmartDeviceKit/TuyaSmartRoomModel.h>
+#import <ThingSmartDeviceKit/ThingSmartHome.h>
+#import <ThingSmartDeviceKit/ThingSmartHomeModel.h>
+#import <ThingSmartDeviceKit/ThingSmartShareDeviceModel.h>
+#import <ThingSmartDeviceKit/ThingSmartGroup+DpCode.h>
+#import <ThingSmartBaseKit/ThingSmartRequest.h>
+#import <ThingSmartDeviceKit/ThingSmartRoomModel.h>
 #import "TuyaRNUtils+Cache.h"
 #import "TuyaRNUtils+DeviceParser.h"
 #import "TuyaRNHomeListener.h"
@@ -26,9 +26,9 @@
 #define kTuyaRNHomeModuleGeoName @"geoName"
 #define kTuyaRNHomeModuleRoomId @"roomId"
 
-@interface TuyaRNHomeModule()<TuyaSmartHomeDelegate>
+@interface TuyaRNHomeModule()<ThingSmartHomeDelegate>
 
-@property (nonatomic, strong) TuyaSmartHome *currentHome;
+@property (nonatomic, strong) ThingSmartHome *currentHome;
 
 @end
 
@@ -40,8 +40,8 @@ RCT_EXPORT_METHOD(getHomeDetail:(NSDictionary *)params resolver:(RCTPromiseResol
 
   self.currentHome = [self smartHomeWithParams:params];
 
-  [self.currentHome getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
-    TuyaSmartHome *newHome = [TuyaSmartHome homeWithHomeId:homeModel.homeId];
+  [self.currentHome getHomeDataWithSuccess:^(ThingSmartHomeModel *homeModel) {
+    ThingSmartHome *newHome = [ThingSmartHome homeWithHomeId:homeModel.homeId];
 
     NSMutableDictionary *homeDic = [[NSMutableDictionary alloc] init];
     [homeDic setObject:getValidDataForDeviceModel(newHome.deviceList) forKey:@"deviceList"];
@@ -153,9 +153,9 @@ RCT_EXPORT_METHOD(sortRoom:(NSDictionary *)params resolver:(RCTPromiseResolveBlo
 
   self.currentHome = [self smartHomeWithParams:params];
 
-  NSMutableArray<TuyaSmartRoomModel *> * list = [NSMutableArray array];
+  NSMutableArray<ThingSmartRoomModel *> * list = [NSMutableArray array];
   for(NSNumber * homeId in params[@"idList"] ) {
-    TuyaSmartRoomModel *room = [[TuyaSmartRoomModel alloc] init];
+    ThingSmartRoomModel *room = [[ThingSmartRoomModel alloc] init];
     room.roomId = [homeId longLongValue];
     [list addObject:room];
   }
@@ -175,7 +175,7 @@ RCT_EXPORT_METHOD(queryRoomList:(NSDictionary *)params resolver:(RCTPromiseResol
   self.currentHome = [self smartHomeWithParams:params];
 
   //获取详情获取：
-  [self.currentHome getHomeDetailWithSuccess:^(TuyaSmartHomeModel *homeModel) {
+  [self.currentHome getHomeDataWithSuccess:^(ThingSmartHomeModel *homeModel) {
     if (self.currentHome.roomList.count == 0) {
       if (resolver) {
         resolver(@[]);
@@ -184,7 +184,7 @@ RCT_EXPORT_METHOD(queryRoomList:(NSDictionary *)params resolver:(RCTPromiseResol
     }
 
     NSMutableArray *list = [NSMutableArray array];
-    for (TuyaSmartRoomModel *roomModel in self.currentHome.roomList) {
+    for (ThingSmartRoomModel *roomModel in self.currentHome.roomList) {
       NSDictionary *dic = [roomModel yy_modelToJSONObject];
       //检查相关字段是否一致
       NSMutableDictionary *roomDic = [NSMutableDictionary dictionaryWithDictionary:dic];
@@ -209,7 +209,7 @@ RCT_EXPORT_METHOD(registerHomeStatusListener:(NSDictionary *)params resolver:(RC
   if (!homeIdNum || homeIdNum.longLongValue <= 0) {
     return;
   }
-  [[TuyaRNHomeListener shareInstance] registerHomeStatusWithSmartHome:[TuyaSmartHome homeWithHomeId:homeIdNum.longLongValue]];
+  [[TuyaRNHomeListener shareInstance] registerHomeStatusWithSmartHome:[ThingSmartHome homeWithHomeId:homeIdNum.longLongValue]];
 }
 
 /**
@@ -232,12 +232,12 @@ RCT_EXPORT_METHOD(onDestroy:(NSDictionary *)params resolver:(RCTPromiseResolveBl
 }
 
 #pragma mark -
-- (TuyaSmartHome *)smartHomeWithParams:(NSDictionary *)params {
+- (ThingSmartHome *)smartHomeWithParams:(NSDictionary *)params {
   long long homeId = ((NSNumber *)params[kTuyaRNHomeModuleHomeId]).longLongValue;
   if (homeId > 0) {
     [TuyaRNUtils setCurrentHomeId:[NSNumber numberWithLongLong:homeId]];
   }
-  self.currentHome = [TuyaSmartHome homeWithHomeId:homeId];
+  self.currentHome = [ThingSmartHome homeWithHomeId:homeId];
   return self.currentHome;
 }
 

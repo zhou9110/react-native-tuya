@@ -9,11 +9,11 @@
 #import "TuyaRNMessageModule.h"
 #import "TuyaRNUtils.h"
 #import <YYModel.h>
-#import <TuyaSmartMessageKit/TuyaSmartMessageKit.h>
+#import <ThingSmartMessageKit/ThingSmartMessageKit.h>
 
 
 @interface TuyaRNMessageModule()
-@property (nonatomic, strong) TuyaSmartMessage *smartMessage;
+@property (nonatomic, strong) ThingSmartMessage *smartMessage;
 @end
 
 
@@ -32,11 +32,11 @@ RCT_EXPORT_METHOD(onDestory:(NSDictionary *)params) {
 
 // 获取消息列表：
 RCT_EXPORT_METHOD(getMessageList:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartMessage *smartMessage = [[TuyaSmartMessage alloc] init];
+    ThingSmartMessage *smartMessage = [[ThingSmartMessage alloc] init];
     self.smartMessage = smartMessage;
-    [smartMessage getMessageList:^(NSArray<TuyaSmartMessageListModel *> *list) {
+    [smartMessage getMessageList:^(NSArray<ThingSmartMessageListModel *> *list) {
         NSMutableArray *res = [NSMutableArray array];
-        for (TuyaSmartMessageListModel *item in list) {
+        for (ThingSmartMessageListModel *item in list) {
           NSDictionary *dic = [item yy_modelToJSONObject];
           [res addObject:dic];
         }
@@ -51,7 +51,7 @@ RCT_EXPORT_METHOD(getMessageList:(RCTPromiseResolveBlock)resolver rejecter:(RCTP
 
 // 删除消息：
 RCT_EXPORT_METHOD(deleteMessage:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  TuyaSmartMessage *smartMessage = [[TuyaSmartMessage alloc] init];
+  ThingSmartMessage *smartMessage = [[ThingSmartMessage alloc] init];
   self.smartMessage = smartMessage;
   [smartMessage deleteMessage:params[@"ids"] success:^{
     if (resolver) {
@@ -64,7 +64,7 @@ RCT_EXPORT_METHOD(deleteMessage:(NSDictionary *)params resolver:(RCTPromiseResol
 
 // 获取最新的时间戳：
 RCT_EXPORT_METHOD(getMessageMaxTime:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  TuyaSmartMessage *smartMessage = [[TuyaSmartMessage alloc] init];
+  ThingSmartMessage *smartMessage = [[ThingSmartMessage alloc] init];
   self.smartMessage = smartMessage;
   [smartMessage getMessageMaxTime:^(int result) {
     if (resolver) {

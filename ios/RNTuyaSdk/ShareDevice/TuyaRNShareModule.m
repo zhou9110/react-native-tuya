@@ -7,13 +7,13 @@
 //
 
 #import "TuyaRNShareModule.h"
-#import <TuyaSmartDeviceKit/TuyaSmartDeviceKit.h>
+#import <ThingSmartDeviceKit/ThingSmartDeviceKit.h>
 #import "TuyaRNUtils.h"
 #import "YYModel.h"
 
 
 @interface TuyaRNShareModule()
-@property (nonatomic, strong) TuyaSmartHomeDeviceShare *deviceShare;
+@property (nonatomic, strong) ThingSmartHomeDeviceShare *deviceShare;
 @end
 
 @implementation TuyaRNShareModule
@@ -32,9 +32,9 @@ RCT_EXPORT_METHOD(onDestory:(NSDictionary *)params) {
 // 添加多个设备共享（覆盖）：
 RCT_EXPORT_METHOD(addShareWithHomeId:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-      TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+      ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
       self.deviceShare = deviceShare;
-      [deviceShare addShareWithHomeId:[params[@"homeId"] longLongValue] countryCode:params[@"countryCode"] userAccount:params[@"userAccount"] devIds:params[@"devIds"] success:^(TuyaSmartShareMemberModel *model) {
+      [deviceShare addShareWithHomeId:[params[@"homeId"] longLongValue] countryCode:params[@"countryCode"] userAccount:params[@"userAccount"] devIds:params[@"devIds"] success:^(ThingSmartShareMemberModel *model) {
           if (resolver) {
             resolver([model yy_modelToJSONObject]);
           }
@@ -46,7 +46,7 @@ RCT_EXPORT_METHOD(addShareWithHomeId:(NSDictionary *)params resolver:(RCTPromise
 // 添加多个设备共享（追加
 RCT_EXPORT_METHOD(addShareWithMemberId:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
     self.deviceShare = deviceShare;
     [deviceShare addShareWithMemberId:[params[@"memberId"] integerValue] devIds:params[@"devIds"] success:^{
         if (resolver) {
@@ -74,12 +74,12 @@ RCT_EXPORT_METHOD(addShareWithMemberId:(NSDictionary *)params resolver:(RCTPromi
 // 查询主动分享的关系列表:
 RCT_EXPORT_METHOD(queryUserShareList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
     self.deviceShare = deviceShare;
-    [deviceShare getShareMemberListWithHomeId:[params[@"homeId"] integerValue] success:^(NSArray<TuyaSmartShareMemberModel *> *list) {
+    [deviceShare getShareMemberListWithHomeId:[params[@"homeId"] integerValue] success:^(NSArray<ThingSmartShareMemberModel *> *list) {
       
     NSMutableArray *res = [NSMutableArray array];
-        for (TuyaSmartShareMemberModel *item in list) {
+        for (ThingSmartShareMemberModel *item in list) {
           NSMutableDictionary *dic = [item yy_modelToJSONObject];
           dic[@"homeId"] = params[@"homeId"];
           [res addObject:[self shareMemberDicAdapter:dic]];
@@ -94,11 +94,11 @@ RCT_EXPORT_METHOD(queryUserShareList:(NSDictionary *)params resolver:(RCTPromise
 
 // 查询收到分享关系列表
 RCT_EXPORT_METHOD(queryShareReceivedUserList:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
   self.deviceShare = deviceShare;
-  [deviceShare getReceiveMemberListWithSuccess:^(NSArray<TuyaSmartShareMemberModel *> *list) {
+  [deviceShare getReceiveMemberListWithSuccess:^(NSArray<ThingSmartShareMemberModel *> *list) {
       NSMutableArray *res = [NSMutableArray array];
-      for (TuyaSmartShareMemberModel *item in list) {
+      for (ThingSmartShareMemberModel *item in list) {
         NSMutableDictionary *dic = [item yy_modelToJSONObject];
         [res addObject:[self shareMemberDicAdapter:dic]];
       }
@@ -113,11 +113,11 @@ RCT_EXPORT_METHOD(queryShareReceivedUserList:(RCTPromiseResolveBlock)resolver re
 
 // 查询指定设备的分享用户列表
 RCT_EXPORT_METHOD(queryDevShareUserList:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-  TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+  ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
   self.deviceShare = deviceShare;
-  [deviceShare getDeviceShareMemberListWithDevId:params[@"devId"] success:^(NSArray<TuyaSmartShareMemberModel *> *list) {
+  [deviceShare getDeviceShareMemberListWithDevId:params[@"devId"] success:^(NSArray<ThingSmartShareMemberModel *> *list) {
     NSMutableArray *res = [NSMutableArray array];
-    for (TuyaSmartShareMemberModel *item in list) {
+    for (ThingSmartShareMemberModel *item in list) {
       NSDictionary *dic = [item yy_modelToJSONObject];
       [res addObject:dic];
     }
@@ -132,9 +132,9 @@ RCT_EXPORT_METHOD(queryDevShareUserList:(NSDictionary *)params resolver:(RCTProm
 // 查询指定设备是谁共享的:
 RCT_EXPORT_METHOD(queryShareDevFromInfo:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-  TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+  ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
   self.deviceShare = deviceShare;
-  [deviceShare getShareInfoWithDevId:params[@"devId"] success:^(TuyaSmartReceivedShareUserModel *model) {
+  [deviceShare getShareInfoWithDevId:params[@"devId"] success:^(ThingSmartReceivedShareUserModel *model) {
       if (resolver) {
         resolver([model yy_modelToJSONObject]);
       }
@@ -147,12 +147,12 @@ RCT_EXPORT_METHOD(queryShareDevFromInfo:(NSDictionary *)params resolver:(RCTProm
 // 查询分享到指定用户的共享关系:
 RCT_EXPORT_METHOD(getUserShareInfo:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
     self.deviceShare = deviceShare;
-    [deviceShare getShareMemberDetailWithMemberId:[params[@"memberId"] integerValue] success:^(TuyaSmartShareMemberDetailModel *model) {
+    [deviceShare getShareMemberDetailWithMemberId:[params[@"memberId"] integerValue] success:^(ThingSmartShareMemberDetailModel *model) {
       
       NSMutableArray *res = [NSMutableArray array];
-      for (TuyaSmartShareDeviceModel *item in model.devices) {
+      for (ThingSmartShareDeviceModel *item in model.devices) {
         NSMutableDictionary *dic = [item yy_modelToJSONObject];
         dic[@"deviceName"] = dic[@"name"];
         [res addObject:dic];
@@ -172,9 +172,9 @@ RCT_EXPORT_METHOD(getUserShareInfo:(NSDictionary *)params resolver:(RCTPromiseRe
 // 查询收到指定用户共享的信息:
 RCT_EXPORT_METHOD(getReceivedShareInfo:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-  TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+  ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
   self.deviceShare = deviceShare;
-  [deviceShare getReceiveMemberDetailWithMemberId:[params[@"memberId"] integerValue] success:^(TuyaSmartReceiveMemberDetailModel *model) {
+  [deviceShare getReceiveMemberDetailWithMemberId:[params[@"memberId"] integerValue] success:^(ThingSmartReceiveMemberDetailModel *model) {
       if (resolver) {
         resolver([model yy_modelToJSONObject]);
       }
@@ -187,7 +187,7 @@ RCT_EXPORT_METHOD(getReceivedShareInfo:(NSDictionary *)params resolver:(RCTPromi
 // 删除共享关系:
 RCT_EXPORT_METHOD(removeUserShare:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
     self.deviceShare = deviceShare;
     [deviceShare removeShareMemberWithMemberId:[params[@"memberId"] integerValue] success:^{
         if (resolver) {
@@ -204,7 +204,7 @@ RCT_EXPORT_METHOD(removeUserShare:(NSDictionary *)params resolver:(RCTPromiseRes
 // 删除收到的共享关系:
 RCT_EXPORT_METHOD(removeReceivedUserShare:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
   self.deviceShare = deviceShare;
   [deviceShare removeReceiveShareMemberWithMemberId:[params[@"memberId"] integerValue] success:^{
       if (resolver) {
@@ -219,7 +219,7 @@ RCT_EXPORT_METHOD(removeReceivedUserShare:(NSDictionary *)params resolver:(RCTPr
  // 删除某个设备共享:
 RCT_EXPORT_METHOD(disableDevShare:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
   self.deviceShare = deviceShare;
   [deviceShare removeDeviceShareWithMemberId:[params[@"memberId"] integerValue] devId:params[@"devId"] success:^{
       if (resolver) {
@@ -234,7 +234,7 @@ RCT_EXPORT_METHOD(disableDevShare:(NSDictionary *)params resolver:(RCTPromiseRes
 
 // 移除收到的分享设备:
 RCT_EXPORT_METHOD(removeReceivedDevShare:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
     self.deviceShare = deviceShare;
     [deviceShare removeReceiveDeviceShareWithDevId:params[@"devId"] success:^{
         if (resolver) {
@@ -249,7 +249,7 @@ RCT_EXPORT_METHOD(removeReceivedDevShare:(NSDictionary *)params resolver:(RCTPro
 
 // 修改发出的分享人的备注名:
 RCT_EXPORT_METHOD(renameShareNickname:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
     self.deviceShare = deviceShare;
     [deviceShare renameShareMemberNameWithMemberId:[params[@"memberId"] integerValue] name:params[@"name"] success:^{
         if (resolver) {
@@ -263,7 +263,7 @@ RCT_EXPORT_METHOD(renameShareNickname:(NSDictionary *)params resolver:(RCTPromis
 // 修改接收到的分享人的备注名:
 RCT_EXPORT_METHOD(renameReceivedShareNickname:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   
-    TuyaSmartHomeDeviceShare *deviceShare  = [[TuyaSmartHomeDeviceShare alloc] init];
+    ThingSmartHomeDeviceShare *deviceShare  = [[ThingSmartHomeDeviceShare alloc] init];
     self.deviceShare = deviceShare;
     [deviceShare renameReceiveShareMemberNameWithMemberId:[params[@"memberId"] integerValue] name:params[@"name"] success:^{
         if (resolver) {
