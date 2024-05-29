@@ -54,10 +54,10 @@ Open your `AndroidManifest.xml` and put the following **in the `<application>` t
 
 ```xml
 <meta-data
-  android:name="TUYA_SMART_APPKEY"
+  android:name="THING_SMART_APPKEY"
   android:value="xxx" />
 <meta-data
-  android:name="TUYA_SMART_SECRET"
+  android:name="THING_SMART_SECRET"
   android:value="xxx" />
 ```
 
