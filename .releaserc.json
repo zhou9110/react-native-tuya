@@ -1,10 +1,6 @@
 {
     "branches": [
-      "master",
-      {
-        "name": "feature/tuya-sdk-upgrade",
-        "prerelease": "RC"
-      }
+      "master"
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",

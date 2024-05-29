@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - feature/tuya-sdk-upgrade
 
 jobs:
   build:
