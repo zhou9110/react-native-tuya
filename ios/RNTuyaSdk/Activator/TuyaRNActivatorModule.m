@@ -52,12 +52,15 @@ RCT_EXPORT_METHOD(initActivator:(NSDictionary *)params resolver:(RCTPromiseResol
   NSString *type = params[kTuyaRNActivatorModuleActivatorMode];
 //  NSString *token = params[kTuyaRNActivatorModuleActivatorToken];
 
-  ThingActivatorMode mode =  ThingActivatorModeEZ;
-  if ([type isEqualToString:@"TY_EZ"]) {
-    mode = ThingActivatorModeEZ;
-  } else if([type isEqualToString:@"TY_AP"]) {
+  ThingActivatorMode mode = ThingActivatorModeEZ;
+
+  if ([type isEqualToString:@"THING_AP"]) {
     mode = ThingActivatorModeAP;
-  } else if([type isEqualToString:@"TY_QR"]) {
+  } else if([type isEqualToString:@"THING_EZ"]) {
+    mode = ThingActivatorModeEZ;
+  } else if([type isEqualToString:@"THING_4G_GATEWAY"]) {
+    mode = ThingActivatorModeAP4GGateway;
+  } else if([type isEqualToString:@"THING_QR"]) {
     mode = ThingActivatorModeQRCode;
   }
 

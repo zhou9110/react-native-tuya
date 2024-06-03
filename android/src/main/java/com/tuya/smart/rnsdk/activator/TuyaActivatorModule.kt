@@ -110,17 +110,33 @@ class TuyaActivatorModule(reactContext: ReactApplicationContext) : ReactContextB
 
   }
 
+  /**
+   * Maps string value to ActivatorModelEnum
+   * Returns null on unknown case
+   */
+  private fun getActivatorModelEnumByString(value: String): ActivatorModelEnum? {
+    return when (value) {
+      "THING_AP" -> ActivatorModelEnum.THING_AP
+      "THING_EZ" -> ActivatorModelEnum.THING_EZ
+      "THING_4G_GATEWAY" -> ActivatorModelEnum.THING_4G_GATEWAY
+      "THING_QR" -> ActivatorModelEnum.THING_QR
+      else -> null
+    }
+  }
+
   @ReactMethod
   fun initActivator(params: ReadableMap, promise: Promise) {
     if (ReactParamsCheck.checkParams(arrayOf(HOMEID, SSID, PASSWORD, TIME, TYPE), params)) {
       ThingHomeSdk.getActivatorInstance().getActivatorToken(params.getDouble(HOMEID).toLong(), object : IThingActivatorGetToken {
         override fun onSuccess(token: String) {
+          val modeValue = params.getString(TYPE) as String
+          val mode = getActivatorModelEnumByString(modeValue) ?: ActivatorModelEnum.THING_EZ
           mITuyaActivator = ThingHomeSdk.getActivatorInstance().newActivator(
             ActivatorBuilder()
             .setSsid(params.getString(SSID))
             .setContext(reactApplicationContext.applicationContext)
             .setPassword(params.getString(PASSWORD))
-            .setActivatorModel(ActivatorModelEnum.valueOf(params.getString(TYPE) as String))
+            .setActivatorModel(mode)
             .setTimeOut(params.getInt(TIME).toLong())
             .setToken(token).setListener(getITuyaSmartActivatorListener(promise)))
           mITuyaActivator?.start()
