@@ -7,9 +7,9 @@
 //
 
 #import "TuyaRNActivatorModule.h"
-#import <TuyaSmartActivatorKit/TuyaSmartActivatorKit.h>
-#import <TuyaSmartBaseKit/TuyaSmartBaseKit.h>
-#import <TuyaSmartDeviceKit/TuyaSmartDeviceKit.h>
+#import <ThingSmartActivatorKit/ThingSmartActivatorKit.h>
+#import <ThingSmartBaseKit/ThingSmartBaseKit.h>
+#import <ThingSmartDeviceKit/ThingSmartDeviceKit.h>
 #import "TuyaRNUtils+Network.h"
 #import "YYModel.h"
 
@@ -23,7 +23,7 @@
 
 static TuyaRNActivatorModule * activatorInstance = nil;
 
-@interface TuyaRNActivatorModule()<TuyaSmartActivatorDelegate>
+@interface TuyaRNActivatorModule()<ThingSmartActivatorDelegate>
 
 @property(copy, nonatomic) RCTPromiseResolveBlock promiseResolveBlock;
 @property(copy, nonatomic) RCTPromiseRejectBlock promiseRejectBlock;
@@ -52,26 +52,29 @@ RCT_EXPORT_METHOD(initActivator:(NSDictionary *)params resolver:(RCTPromiseResol
   NSString *type = params[kTuyaRNActivatorModuleActivatorMode];
 //  NSString *token = params[kTuyaRNActivatorModuleActivatorToken];
 
-  TYActivatorMode mode =  TYActivatorModeEZ;
-  if ([type isEqualToString:@"TY_EZ"]) {
-    mode = TYActivatorModeEZ;
-  } else if([type isEqualToString:@"TY_AP"]) {
-    mode = TYActivatorModeAP;
-  } else if([type isEqualToString:@"TY_QR"]) {
-    mode = TYActivatorModeQRCode;
+  ThingActivatorMode mode = ThingActivatorModeEZ;
+
+  if ([type isEqualToString:@"THING_AP"]) {
+    mode = ThingActivatorModeAP;
+  } else if([type isEqualToString:@"THING_EZ"]) {
+    mode = ThingActivatorModeEZ;
+  } else if([type isEqualToString:@"THING_4G_GATEWAY"]) {
+    mode = ThingActivatorModeAP4GGateway;
+  } else if([type isEqualToString:@"THING_QR"]) {
+    mode = ThingActivatorModeQRCode;
   }
 
   if (activatorInstance == nil) {
     activatorInstance = [TuyaRNActivatorModule new];
   }
 
-  [TuyaSmartActivator sharedInstance].delegate = activatorInstance;
+  [ThingSmartActivator sharedInstance].delegate = activatorInstance;
   activatorInstance.promiseResolveBlock = resolver;
   activatorInstance.promiseRejectBlock = rejecter;
 
-  [[TuyaSmartActivator sharedInstance] getTokenWithHomeId:homeId.longLongValue success:^(NSString *result) {
+  [[ThingSmartActivator sharedInstance] getTokenWithHomeId:homeId.longLongValue success:^(NSString *result) {
     //开始配置网络：
-    [[TuyaSmartActivator sharedInstance] startConfigWiFi:mode ssid:ssid password:password token:result timeout:time.doubleValue];
+    [[ThingSmartActivator sharedInstance] startConfigWiFi:mode ssid:ssid password:password token:result timeout:time.doubleValue];
   } failure:^(NSError *error) {
     [TuyaRNUtils rejecterWithError:error handler:rejecter];
   }];
@@ -80,7 +83,7 @@ RCT_EXPORT_METHOD(initActivator:(NSDictionary *)params resolver:(RCTPromiseResol
 
 RCT_EXPORT_METHOD(stopConfig:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
 
-  [[TuyaSmartActivator sharedInstance] stopConfigWiFi];
+  [[ThingSmartActivator sharedInstance] stopConfigWiFi];
 }
 
 //ZigBee子设备配网需要ZigBee网关设备云在线的情况下才能发起,且子设备处于配网状态。
@@ -94,25 +97,25 @@ RCT_EXPORT_METHOD(newGwSubDevActivator:(NSDictionary *)params resolver:(RCTPromi
     activatorInstance = [TuyaRNActivatorModule new];
   }
 
-  [TuyaSmartActivator sharedInstance].delegate = activatorInstance;
+  [ThingSmartActivator sharedInstance].delegate = activatorInstance;
   activatorInstance.promiseResolveBlock = resolver;
   activatorInstance.promiseRejectBlock = rejecter;
 
-  [[TuyaSmartActivator sharedInstance] activeSubDeviceWithGwId:deviceId timeout:time.doubleValue];
+  [[ThingSmartActivator sharedInstance] activeSubDeviceWithGwId:deviceId timeout:time.doubleValue];
 
 }
 
 RCT_EXPORT_METHOD(stopNewGwSubDevActivatorConfig:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
 
   NSString *deviceId = params[kTuyaRNActivatorModuleDeviceId];
-  [[TuyaSmartActivator sharedInstance] stopActiveSubDeviceWithGwId:deviceId];
+  [[ThingSmartActivator sharedInstance] stopActiveSubDeviceWithGwId:deviceId];
 }
 
 /**
  获取wifi信息
  */
 RCT_EXPORT_METHOD(getCurrentWifi:(NSDictionary *)params success:(RCTResponseSenderBlock)succ failure:(RCTResponseErrorBlock)fail) {
-  NSString *ssid = [TuyaSmartActivator currentWifiSSID];
+  NSString *ssid = [ThingSmartActivator currentWifiSSID];
   if ([ssid isKindOfClass:[NSString class]] && ssid.length > 0) {
     succ(@[ssid]);
   } else {
@@ -136,7 +139,7 @@ RCT_EXPORT_METHOD(onDestory:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromis
 #pragma mark -
 #pragma mark - delegate
 /// 配网状态更新的回调，wifi单品，zigbee网关，zigbee子设备
-- (void)activator:(TuyaSmartActivator *)activator didReceiveDevice:(TuyaSmartDeviceModel *)deviceModel error:(NSError *)error {
+- (void)activator:(ThingSmartActivator *)activator didReceiveDevice:(ThingSmartDeviceModel *)deviceModel error:(NSError *)error {
 
   if (error) {
     if (activatorInstance.promiseRejectBlock) {

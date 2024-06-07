@@ -1,29 +1,25 @@
 package com.tuya.smart.rnsdk.timer
 
-import android.util.Log
 import com.facebook.react.bridge.*
-import com.tuya.smart.home.sdk.TuyaHomeSdk
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.sdk.api.IGetAllTimerWithDevIdCallback
+import com.thingclips.smart.sdk.api.IGetDeviceTimerStatusCallback
+import com.thingclips.smart.sdk.api.IGetTimerWithTaskCallback
+import com.thingclips.smart.sdk.api.IResultStatusCallback
+import com.thingclips.smart.sdk.bean.TimerTask
+import com.thingclips.smart.sdk.bean.TimerTaskStatus
 import com.tuya.smart.rnsdk.utils.Constant
 import com.tuya.smart.rnsdk.utils.Constant.DEVID
-import com.tuya.smart.rnsdk.utils.Constant.DPID
 import com.tuya.smart.rnsdk.utils.Constant.DPS
-import com.tuya.smart.rnsdk.utils.Constant.INSTRUCT
 import com.tuya.smart.rnsdk.utils.Constant.ISOPEN
 import com.tuya.smart.rnsdk.utils.Constant.LOOPS
 import com.tuya.smart.rnsdk.utils.Constant.STATUS
 import com.tuya.smart.rnsdk.utils.Constant.TASKNAME
 import com.tuya.smart.rnsdk.utils.Constant.TIME
 import com.tuya.smart.rnsdk.utils.Constant.TIMERID
-import com.tuya.smart.rnsdk.utils.Constant.getIResultCallback
 import com.tuya.smart.rnsdk.utils.JsonUtils
 import com.tuya.smart.rnsdk.utils.ReactParamsCheck
 import com.tuya.smart.rnsdk.utils.TuyaReactUtils
-import com.tuya.smart.sdk.api.IGetAllTimerWithDevIdCallback
-import com.tuya.smart.sdk.api.IGetDeviceTimerStatusCallback
-import com.tuya.smart.sdk.api.IGetTimerWithTaskCallback
-import com.tuya.smart.sdk.api.IResultStatusCallback
-import com.tuya.smart.sdk.bean.TimerTask
-import com.tuya.smart.sdk.bean.TimerTaskStatus
 import java.util.ArrayList
 
 
@@ -45,7 +41,7 @@ class TuyaTimerModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun addTimerWithTask(params: ReadableMap,promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(TASKNAME, LOOPS,DEVID, DPS, TIME), params)) {
-            TuyaHomeSdk.getTimerManagerInstance().addTimerWithTask(
+            ThingHomeSdk.getTimerManagerInstance().addTimerWithTask(
                     params.getString(TASKNAME),
                     params.getString(DEVID),
                     params.getString(LOOPS),
@@ -60,7 +56,7 @@ class TuyaTimerModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getTimerTaskStatusWithDeviceId(params: ReadableMap,promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            TuyaHomeSdk.getTimerManagerInstance().getTimerTaskStatusWithDeviceId(
+            ThingHomeSdk.getTimerManagerInstance().getTimerTaskStatusWithDeviceId(
                     params.getString(DEVID),
                     getIGetDeviceTimerStatusCallback(promise)
             )
@@ -71,7 +67,7 @@ class TuyaTimerModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun updateTimerTaskStatusWithTask(params: ReadableMap,promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(TASKNAME,DEVID,STATUS), params)) {
-            TuyaHomeSdk.getTimerManagerInstance().updateTimerTaskStatusWithTask(
+            ThingHomeSdk.getTimerManagerInstance().updateTimerTaskStatusWithTask(
                     params.getString(TASKNAME),
                     params.getString(DEVID),
                     params.getInt(STATUS),
@@ -84,7 +80,7 @@ class TuyaTimerModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun updateTimerStatusWithTask(params: ReadableMap,promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(TASKNAME,DEVID,TIMERID, ISOPEN), params)) {
-            TuyaHomeSdk.getTimerManagerInstance().updateTimerStatusWithTask(
+            ThingHomeSdk.getTimerManagerInstance().updateTimerStatusWithTask(
                     params.getString(TASKNAME),
                     params.getString(DEVID),
                     params.getString(TIMERID),
@@ -99,7 +95,7 @@ class TuyaTimerModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun removeTimerWithTask(params: ReadableMap,promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(TASKNAME,DEVID, TIMERID), params)) {
-            TuyaHomeSdk.getTimerManagerInstance().removeTimerWithTask(
+            ThingHomeSdk.getTimerManagerInstance().removeTimerWithTask(
                     params.getString(TASKNAME),
                     params.getString(DEVID),
                     params.getString(TIMERID),
@@ -121,7 +117,7 @@ class TuyaTimerModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun updateTimerWithTask(params: ReadableMap,promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(TASKNAME, LOOPS, DEVID, TIMERID, TIME, ISOPEN), params)) {
-            TuyaHomeSdk.getTimerManagerInstance().updateTimerWithTask(
+            ThingHomeSdk.getTimerManagerInstance().updateTimerWithTask(
                     params.getString(TASKNAME),
                     params.getString(LOOPS),
                     params.getString(DEVID),
@@ -138,7 +134,7 @@ class TuyaTimerModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getTimerWithTask(params: ReadableMap,promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(TASKNAME, DEVID), params)) {
-            TuyaHomeSdk.getTimerManagerInstance().getTimerWithTask(
+            ThingHomeSdk.getTimerManagerInstance().getTimerWithTask(
                     params.getString(TASKNAME),
                     params.getString(DEVID),
                     getIGetTimerWithTaskCallback(promise))
@@ -149,7 +145,7 @@ class TuyaTimerModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun getAllTimerWithDeviceId(params: ReadableMap,promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(DEVID), params)) {
-            TuyaHomeSdk.getTimerManagerInstance().getAllTimerWithDeviceId(
+            ThingHomeSdk.getTimerManagerInstance().getAllTimerWithDeviceId(
                     params.getString(DEVID),
                     getIGetAllTimerWithDevIdCallback(promise))
         }

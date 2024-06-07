@@ -7,14 +7,13 @@ import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONArray
 import com.facebook.react.bridge.*
-import com.tuya.smart.home.sdk.TuyaHomeSdk
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.sdk.api.INeedLoginListener
+import com.thingclips.smart.sdk.api.IThingDataCallback
 import com.tuya.smart.rnsdk.utils.Constant.API_REQUEST_ERROR
 import com.tuya.smart.rnsdk.utils.Constant.NEEDLOGIN
 import com.tuya.smart.rnsdk.utils.TYRCTCommonUtil
 import com.tuya.smart.rnsdk.utils.TuyaReactUtils
-import com.tuya.smart.sdk.api.INeedLoginListener
-import com.tuya.smart.sdk.api.IRequestCallback
-import com.tuya.smart.sdk.api.ITuyaDataCallback
 import java.util.HashMap
 
 
@@ -22,15 +21,15 @@ class TuyaCoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
     companion object {
         fun initTuyaSDk(appKey:String,appSecret:String,application: Application){
-            TuyaHomeSdk.init(application, appKey, appSecret)
+            ThingHomeSdk.init(application, appKey, appSecret)
         }
 
         fun initTuyaSDKWithoutOptions(application: Application){
-            TuyaHomeSdk.init(application)
+            ThingHomeSdk.init(application)
         }
 
         fun setSDKDebug(open:Boolean){
-            TuyaHomeSdk.setDebugMode(open)
+            ThingHomeSdk.setDebugMode(open)
         }
     }
 
@@ -44,8 +43,8 @@ class TuyaCoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
     @ReactMethod
     @Deprecated("Android can't initSDK in react-native,it should be used in application")
     fun initWithoutOptions() {
-        TuyaHomeSdk.init(reactApplicationContext.applicationContext as Application?);
-        TuyaHomeSdk.setOnNeedLoginListener {
+        ThingHomeSdk.init(reactApplicationContext.applicationContext as Application?);
+        ThingHomeSdk.setOnNeedLoginListener {
             TuyaReactUtils.sendEvent(reactApplicationContext, NEEDLOGIN, null)
         }
     }
@@ -55,8 +54,8 @@ class TuyaCoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
     fun initWithOptions(params: ReadableMap) {
         val appKey = params.getString("appKey")
         val appSecret = params.getString("appSecret")
-        TuyaHomeSdk.init(reactApplicationContext.applicationContext as Application?, appKey, appSecret)
-        TuyaHomeSdk.setOnNeedLoginListener(INeedLoginListener() {
+        ThingHomeSdk.init(reactApplicationContext.applicationContext as Application?, appKey, appSecret)
+        ThingHomeSdk.setOnNeedLoginListener(INeedLoginListener() {
             fun onNeedLogin(context: Context?) {
                 TuyaReactUtils.sendEvent(reactApplicationContext, NEEDLOGIN, null)
             }
@@ -65,7 +64,7 @@ class TuyaCoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
     @ReactMethod
     fun setOnNeedLoginListener(){
-        TuyaHomeSdk.setOnNeedLoginListener(INeedLoginListener() {
+        ThingHomeSdk.setOnNeedLoginListener(INeedLoginListener() {
             fun onNeedLogin(context: Context?) {
                 TuyaReactUtils.sendEvent(reactApplicationContext, NEEDLOGIN, null)
             }
@@ -76,12 +75,12 @@ class TuyaCoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
 
     @ReactMethod
     fun exitApp() {
-        TuyaHomeSdk.onDestroy();
+        ThingHomeSdk.onDestroy();
     }
 
     @ReactMethod
     fun apiRequest(params: ReadableMap, promise: Promise) {
-        val callback = object : ITuyaDataCallback<Any> {
+        val callback = object : IThingDataCallback<Any> {
             override fun onSuccess(data: Any?) {
                 if (data is Boolean) {
                     Log.e("apiRequest", data.toString())
@@ -116,9 +115,9 @@ class TuyaCoreModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
         }
 
         if (withoutSession) {
-            TuyaHomeSdk.getRequestInstance().requestWithApiNameWithoutSession(apiName, apiVersion, postData, Any::class.java, callback)
+            ThingHomeSdk.getRequestInstance().requestWithApiNameWithoutSession(apiName, apiVersion, postData, Any::class.java, callback)
         } else {
-            TuyaHomeSdk.getRequestInstance().requestWithApiName(apiName, apiVersion, postData, Any::class.java,callback)
+            ThingHomeSdk.getRequestInstance().requestWithApiName(apiName, apiVersion, postData, Any::class.java,callback)
         }
 
     }

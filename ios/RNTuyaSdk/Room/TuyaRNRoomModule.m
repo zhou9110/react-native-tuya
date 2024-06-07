@@ -7,7 +7,7 @@
 //
 
 #import "TuyaRNRoomModule.h"
-#import <TuyaSmartDeviceKit/TuyaSmartRoom.h>
+#import <ThingSmartDeviceKit/ThingSmartRoom.h>
 #import "TuyaRNUtils.h"
 
 #define kTuyaRNRoomModuleName @"name"
@@ -18,7 +18,7 @@
 
 @interface TuyaRNRoomModule()
 
-@property (strong, nonatomic) TuyaSmartRoom *smartRoom;
+@property (strong, nonatomic) ThingSmartRoom *smartRoom;
 
 @end
 
@@ -87,11 +87,11 @@ RCT_EXPORT_METHOD(removeGroup:(NSDictionary *)params resolver:(RCTPromiseResolve
 
 #pragma mark -
 #pragma mark - init
-- (TuyaSmartRoom *)smartRoomWithParams:(NSDictionary *)params {
+- (ThingSmartRoom *)smartRoomWithParams:(NSDictionary *)params {
   
   NSNumber *homeId = params[kTuyaRNRoomModuleHomeId];
   NSNumber *roomId = params[kTuyaRNRoomModuleRoomId];
-  return [TuyaSmartRoom roomWithRoomId:roomId.longLongValue homeId:homeId.longLongValue];
+  return [ThingSmartRoom roomWithRoomId:roomId.longLongValue homeId:homeId.longLongValue];
 }
 
 @end

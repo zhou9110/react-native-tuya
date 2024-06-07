@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <TuyaSmartDeviceKit/TuyaSmartHome.h>
-#import <TuyaSmartDeviceKit/TuyaSmartHomeManager.h>
-#import <TuyaSmartBaseKit/TuyaSmartRequest.h>
+#import <ThingSmartDeviceKit/ThingSmartHome.h>
+#import <ThingSmartDeviceKit/ThingSmartHomeManager.h>
+#import <ThingSmartBaseKit/ThingSmartRequest.h>
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -19,13 +19,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)shareInstance;
 
 //注册新的SmartHome
-- (void)registerHomeChangeWithSmartHome:(TuyaSmartHome *)smartHome;
+- (void)registerHomeChangeWithSmartHome:(ThingSmartHome *)smartHome;
 
 //取消注册
 - (void)removeHomeChangeSmartHome;
 
 //注册新的 监听status
-- (void)registerHomeStatusWithSmartHome:(TuyaSmartHome *)smartHome;
+- (void)registerHomeStatusWithSmartHome:(ThingSmartHome *)smartHome;
 
 //取消 监听
 - (void)removeHomeStatusSmartHome;

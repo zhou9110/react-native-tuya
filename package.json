@@ -1,6 +1,7 @@
 {
-  "version": "0.3.19",
+  "version": "1.0.0-RC.2",
   "license": "MIT",
+  "private": false,
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "keywords": [
@@ -20,7 +21,8 @@
     "build": "tsdx build",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "commit": "cz",
+    "prepare": "husky install"
   },
   "peerDependencies": {
     "react-native": ">=0.61.5"
@@ -34,19 +36,39 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "@volst/react-native-tuya",
+  "name": "@owowagency/react-native-tuya",
   "description": "React Native bindings for the Tuya SDK",
-  "homepage": "https://github.com/Volst/react-native-tuya#readme",
+  "homepage": "https://github.com/owowagency/react-native-tuya#readme",
   "author": "Kees Kluskens",
   "module": "dist/react-native-tuya.esm.js",
   "devDependencies": {
     "@types/jest": "^25.1.2",
     "@types/react-native": "^0.61.16",
     "@volst/eslint-config": "^4.1.1",
-    "husky": "^4.2.3",
     "react-native": "^0.61.5",
     "tsdx": "^0.12.3",
     "tslib": "^1.10.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "@commitlint/cli": "^18.1.0",
+    "@commitlint/config-conventional": "^18.1.0",
+    "@semantic-release/commit-analyzer": "^11.0.0",
+    "@semantic-release/exec": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^11.0.0",
+    "commitizen": "^4.3.0",
+    "commitlint": "^18.1.0",
+    "conventional-changelog-conventionalcommits": "^7.0.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^8.0.3",
+    "semantic-release": "^22.0.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

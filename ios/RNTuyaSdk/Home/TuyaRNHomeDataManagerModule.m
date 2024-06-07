@@ -7,7 +7,7 @@
 //
 
 #import "TuyaRNHomeDataManagerModule.h"
-#import <TuyaSmartDeviceKit/TuyaSmartDeviceKit.h>
+#import <ThingSmartDeviceKit/ThingSmartDeviceKit.h>
 #import "TuyaRNUtils+Cache.h"
 #import "TuyaRNUtils+DeviceParser.h"
 
@@ -16,7 +16,7 @@
 
 @interface TuyaRNHomeDataManagerModule()
 
-@property (strong, nonatomic) TuyaSmartRoom *smartRoom;
+@property (strong, nonatomic) ThingSmartRoom *smartRoom;
 
 @end
 
@@ -81,7 +81,7 @@ RCT_EXPORT_METHOD(getRoomDeviceList:(NSDictionary *)params resolver:(RCTPromiseR
   NSNumber *roomId = params[kTuyaRNHomeDataManagerModuleRoomId];
   
   //获取room下的设备
-  self.smartRoom = [TuyaSmartRoom roomWithRoomId:roomId.longLongValue homeId:homeId.longLongValue];
+  self.smartRoom = [ThingSmartRoom roomWithRoomId:roomId.longLongValue homeId:homeId.longLongValue];
   if(resolver) {
     NSMutableDictionary *roomDic = [[NSMutableDictionary alloc] initWithCapacity:2];
     [roomDic setObject:getValidDataForDeviceModel(self.smartRoom.deviceList) forKey:@"deviceList"];

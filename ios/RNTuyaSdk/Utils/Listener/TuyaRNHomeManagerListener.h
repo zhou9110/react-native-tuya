@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <TuyaSmartDeviceKit/TuyaSmartHome.h>
-#import <TuyaSmartDeviceKit/TuyaSmartHomeManager.h>
-#import <TuyaSmartBaseKit/TuyaSmartRequest.h>
+#import <ThingSmartDeviceKit/ThingSmartHome.h>
+#import <ThingSmartDeviceKit/ThingSmartHomeManager.h>
+#import <ThingSmartBaseKit/ThingSmartRequest.h>
 
 
 
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
  注册家庭管理通知
 
  */
-- (void)registerSmartHomeManager:(TuyaSmartHomeManager *)homeManager;
+- (void)registerSmartHomeManager:(ThingSmartHomeManager *)homeManager;
 
 
 /**

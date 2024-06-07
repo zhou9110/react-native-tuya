@@ -1,16 +1,16 @@
 package com.tuya.smart.rnsdk.home
 
 import com.facebook.react.bridge.*
-import com.tuya.smart.android.common.utils.L
-import com.tuya.smart.home.sdk.TuyaHomeSdk
-import com.tuya.smart.home.sdk.api.ITuyaHome
-import com.tuya.smart.home.sdk.api.ITuyaHomeStatusListener
-import com.tuya.smart.home.sdk.bean.HomeBean
-import com.tuya.smart.home.sdk.bean.RoomBean
-import com.tuya.smart.home.sdk.callback.ITuyaGetRoomListCallback
-import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback
-import com.tuya.smart.home.sdk.callback.ITuyaResultCallback
-import com.tuya.smart.home.sdk.callback.ITuyaRoomResultCallback
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.home.sdk.api.IThingHome
+import com.thingclips.smart.home.sdk.api.IThingHomeStatusListener
+import com.thingclips.smart.home.sdk.bean.HomeBean
+import com.thingclips.smart.home.sdk.bean.RoomBean
+import com.thingclips.smart.home.sdk.callback.IThingGetRoomListCallback
+import com.thingclips.smart.home.sdk.callback.IThingHomeResultCallback
+import com.thingclips.smart.home.sdk.callback.IThingResultCallback
+import com.thingclips.smart.home.sdk.callback.IThingRoomResultCallback
+import com.thingclips.smart.sdk.bean.GroupDeviceBean
 import com.tuya.smart.rnsdk.utils.*
 import com.tuya.smart.rnsdk.utils.Constant.DEVIDLIST
 import com.tuya.smart.rnsdk.utils.Constant.GEONAME
@@ -22,7 +22,6 @@ import com.tuya.smart.rnsdk.utils.Constant.NAME
 import com.tuya.smart.rnsdk.utils.Constant.PRODUCTID
 import com.tuya.smart.rnsdk.utils.Constant.ROOMID
 import com.tuya.smart.rnsdk.utils.Constant.getIResultCallback
-import com.tuya.smart.sdk.bean.GroupDeviceBean
 
 
 class TuyaHomeModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
@@ -125,7 +124,7 @@ class TuyaHomeModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
                     params.getString(PRODUCTID),
                     params.getString(NAME),
                     list,
-                    object : ITuyaResultCallback<Long> {
+                    object : IThingResultCallback<Long> {
                         override fun onSuccess(var1: Long) {
                             promise.resolve(var1)
                         }
@@ -143,7 +142,7 @@ class TuyaHomeModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
     @ReactMethod
     fun registerHomeStatusListener(params: ReadableMap) {
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID), params)) {
-            getHomeInstance(params.getDouble(HOMEID))?.registerHomeStatusListener(object : ITuyaHomeStatusListener{
+            getHomeInstance(params.getDouble(HOMEID))?.registerHomeStatusListener(object : IThingHomeStatusListener {
                 override fun onDeviceAdded(var1: String){
                     val map = Arguments.createMap()
                     map.putString("devId", var1)
@@ -200,7 +199,7 @@ class TuyaHomeModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
         if (ReactParamsCheck.checkParams(arrayOf(HOMEID, PRODUCTID), params)) {
             getHomeInstance(params.getDouble(HOMEID))?.queryDeviceListToAddGroup(params.getDouble(HOMEID).toLong(),
                     params.getString(PRODUCTID),
-                    object : ITuyaResultCallback<List<GroupDeviceBean>> {
+                    object : IThingResultCallback<List<GroupDeviceBean>> {
                         override fun onSuccess(var1: List<GroupDeviceBean>) {
                             promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(var1)))
                         }
@@ -221,14 +220,14 @@ class TuyaHomeModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
         }
     }
 
-    fun getHomeInstance(homeId: Double): ITuyaHome? {
-        return TuyaHomeSdk.newHomeInstance(homeId.toLong())
+    fun getHomeInstance(homeId: Double): IThingHome? {
+        return ThingHomeSdk.newHomeInstance(homeId.toLong())
     }
 
 
 
-    fun ITuyaGetRoomListCallback(promise: Promise): ITuyaGetRoomListCallback? {
-        return object : ITuyaGetRoomListCallback {
+    fun ITuyaGetRoomListCallback(promise: Promise): IThingGetRoomListCallback? {
+        return object : IThingGetRoomListCallback {
             override fun onSuccess(var1: List<RoomBean>) {
                 promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(var1)))
             }
@@ -240,8 +239,8 @@ class TuyaHomeModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
     }
 
 
-    fun getITuyaRoomResultCallback(promise: Promise): ITuyaRoomResultCallback? {
-        return object : ITuyaRoomResultCallback {
+    fun getITuyaRoomResultCallback(promise: Promise): IThingRoomResultCallback? {
+        return object : IThingRoomResultCallback {
             override fun onSuccess(p0: RoomBean) {
                 promise.resolve(TuyaReactUtils.parseToWritableMap(p0))
             }
@@ -252,8 +251,8 @@ class TuyaHomeModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
         }
     }
 
-    fun getITuyaHomeResultCallback(promise: Promise): ITuyaHomeResultCallback? {
-        return object : ITuyaHomeResultCallback {
+    fun getITuyaHomeResultCallback(promise: Promise): IThingHomeResultCallback? {
+        return object : IThingHomeResultCallback {
             override fun onSuccess(p0: HomeBean?) {
                 promise.resolve(TYCommonUtls.parseToWritableMap(p0))
             }

@@ -1,15 +1,15 @@
 package com.tuya.smart.rnsdk.message
 
 import com.facebook.react.bridge.*
-import com.tuya.smart.android.user.api.IBooleanCallback
-import com.tuya.smart.home.sdk.TuyaHomeSdk
+import com.thingclips.smart.android.user.api.IBooleanCallback
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.sdk.api.IThingDataCallback
+import com.thingclips.smart.sdk.bean.message.MessageBean
 import com.tuya.smart.rnsdk.utils.Constant
 import com.tuya.smart.rnsdk.utils.Constant.IDS
 import com.tuya.smart.rnsdk.utils.JsonUtils
 import com.tuya.smart.rnsdk.utils.ReactParamsCheck
 import com.tuya.smart.rnsdk.utils.TuyaReactUtils
-import com.tuya.smart.sdk.api.ITuyaDataCallback
-import com.tuya.smart.sdk.bean.message.MessageBean
 import java.util.ArrayList
 
 
@@ -20,7 +20,7 @@ class TuyaMessageModule(reactContext: ReactApplicationContext) : ReactContextBas
     }
     @ReactMethod
     fun getMessageList(promise: Promise) {
-       TuyaHomeSdk.getMessageInstance().getMessageList(object : ITuyaDataCallback<List<MessageBean>> {
+       ThingHomeSdk.getMessageInstance().getMessageList(object : IThingDataCallback<List<MessageBean>> {
             override fun onSuccess(p0: List<MessageBean>?) {
                 promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(p0!!)))
             }
@@ -39,7 +39,7 @@ class TuyaMessageModule(reactContext: ReactApplicationContext) : ReactContextBas
             for (index in 0..length) {
                 list.add((params.getArray(Constant.IDS) as ReadableArray).getString(index) as String)
             }
-            TuyaHomeSdk.getMessageInstance().deleteMessages(list,object :IBooleanCallback{
+            ThingHomeSdk.getMessageInstance().deleteMessages(list,object : IBooleanCallback {
                 override fun onSuccess(){
                     promise.resolve(Constant.SUCCESS)
                 }
@@ -53,7 +53,7 @@ class TuyaMessageModule(reactContext: ReactApplicationContext) : ReactContextBas
 
     @ReactMethod
     fun getMessageMaxTime(promise: Promise){
-        TuyaHomeSdk.getMessageInstance().getMessageMaxTime(object : ITuyaDataCallback<Int> {
+        ThingHomeSdk.getMessageInstance().getMessageMaxTime(object : IThingDataCallback<Int> {
             override fun onSuccess(p0: Int) {
                 promise.resolve(p0)
             }

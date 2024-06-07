@@ -7,7 +7,7 @@
 //
 
 #import "TuyaRNDeviceListener.h"
-#import <TuyaSmartDeviceCoreKit/TuyaSmartDevice.h>
+#import <ThingSmartDeviceCoreKit/ThingSmartDevice.h>
 #import <YYModel/YYModel.h>
 #import "TuyaRNEventEmitter.h"
 
@@ -15,9 +15,9 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
   return type < pow(2, 3) && type > 0;//1,2,4
 }
 
-@interface TuyaRNDeviceListener() <TuyaSmartDeviceDelegate>
+@interface TuyaRNDeviceListener() <ThingSmartDeviceDelegate>
 
-@property (nonatomic, strong) NSMutableArray<TuyaSmartDevice *> *listenDeviceArr;
+@property (nonatomic, strong) NSMutableArray<ThingSmartDevice *> *listenDeviceArr;
 
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *listenTypeDic;
 
@@ -42,14 +42,14 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
   return self;
 }
 
-+ (void)registerDevice:(TuyaSmartDevice *)device type:(TuyaRNDeviceListenType)type {
++ (void)registerDevice:(ThingSmartDevice *)device type:(TuyaRNDeviceListenType)type {
 
   if (!TuyaRNDeviceListenTypeAvailable(type)) {
     return;
   }
 
   __block BOOL exist = NO;
-  [[TuyaRNDeviceListener shareInstance].listenDevices enumerateObjectsUsingBlock:^(TuyaSmartDevice * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+  [[TuyaRNDeviceListener shareInstance].listenDevices enumerateObjectsUsingBlock:^(ThingSmartDevice * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     if ([obj.deviceModel.devId isEqualToString:device.deviceModel.devId]) {
       exist = YES;
       *stop = YES;
@@ -74,7 +74,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 
 }
 
-+ (void)removeDevice:(TuyaSmartDevice *)device type:(TuyaRNDeviceListenType)type {
++ (void)removeDevice:(ThingSmartDevice *)device type:(TuyaRNDeviceListenType)type {
   [self removeDeviceWithDeviceId:device.deviceModel.devId type:type];
 }
 
@@ -95,7 +95,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
   } else {
     [[TuyaRNDeviceListener shareInstance].listenTypeDic removeObjectForKey:deviceId];
     __block NSInteger deviceIdx = -1;
-    [[TuyaRNDeviceListener shareInstance].listenDeviceArr enumerateObjectsUsingBlock:^(TuyaSmartDevice * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [[TuyaRNDeviceListener shareInstance].listenDeviceArr enumerateObjectsUsingBlock:^(ThingSmartDevice * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
       if ([obj.deviceModel.devId isEqualToString:deviceId]) {
         obj.delegate = nil;
         deviceIdx = idx;
@@ -116,7 +116,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 #pragma mark -
 #pragma mark - delegate
 /// 设备信息更新
-- (void)deviceInfoUpdate:(TuyaSmartDevice *)device {
+- (void)deviceInfoUpdate:(ThingSmartDevice *)device {
   NSString *deviceId = device.deviceModel.devId;
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
@@ -133,7 +133,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 }
 
 /// 设备被移除
-- (void)deviceRemoved:(TuyaSmartDevice *)device {
+- (void)deviceRemoved:(ThingSmartDevice *)device {
 
   NSString *deviceId = device.deviceModel.devId;
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
@@ -151,7 +151,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 }
 
 /// dp数据更新
-- (void)device:(TuyaSmartDevice *)device dpsUpdate:(NSDictionary *)dps {
+- (void)device:(ThingSmartDevice *)device dpsUpdate:(NSDictionary *)dps {
 
   NSString *deviceId = device.deviceModel.devId;
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
@@ -179,7 +179,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 }
 
 /// 固件升级成功
-- (void)deviceFirmwareUpgradeSuccess:(TuyaSmartDevice *)device type:(NSInteger)type {
+- (void)deviceFirmwareUpgradeSuccess:(ThingSmartDevice *)device type:(NSInteger)type {
   NSString *deviceId = device.deviceModel.devId;
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
@@ -196,7 +196,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 }
 
 /// 固件升级失败
-- (void)deviceFirmwareUpgradeFailure:(TuyaSmartDevice *)device type:(NSInteger)type {
+- (void)deviceFirmwareUpgradeFailure:(ThingSmartDevice *)device type:(NSInteger)type {
   NSString *deviceId = device.deviceModel.devId;
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
@@ -218,7 +218,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
  *  @param type     设备类型
  *  @param progress 升级进度
  */
-- (void)device:(TuyaSmartDevice *)device firmwareUpgradeProgress:(NSInteger)type progress:(double)progress {
+- (void)device:(ThingSmartDevice *)device firmwareUpgradeProgress:(NSInteger)type progress:(double)progress {
   NSString *deviceId = device.deviceModel.devId;
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {
     return;
@@ -236,7 +236,7 @@ static inline BOOL TuyaRNDeviceListenTypeAvailable(TuyaRNDeviceListenType type) 
 }
 
 // wifi信号强度回调
-- (void)device:(TuyaSmartDevice *)device signal:(NSString *)signal {
+- (void)device:(ThingSmartDevice *)device signal:(NSString *)signal {
 
   NSString *deviceId = device.deviceModel.devId;
   if (!([deviceId isKindOfClass:[NSString class]] && deviceId.length > 0)) {

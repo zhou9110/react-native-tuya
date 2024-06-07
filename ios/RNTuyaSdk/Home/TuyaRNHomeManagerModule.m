@@ -7,9 +7,9 @@
 //
 
 #import "TuyaRNHomeManagerModule.h"
-#import <TuyaSmartDeviceKit/TuyaSmartHome.h>
-#import <TuyaSmartDeviceKit/TuyaSmartHomeManager.h>
-#import <TuyaSmartBaseKit/TuyaSmartRequest.h>
+#import <ThingSmartDeviceKit/ThingSmartHome.h>
+#import <ThingSmartDeviceKit/ThingSmartHomeManager.h>
+#import <ThingSmartBaseKit/ThingSmartRequest.h>
 #import "YYModel.h"
 #import "TuyaRNUtils.h"
 #import "TuyaRNHomeManagerListener.h"
@@ -26,8 +26,8 @@
 
 @interface TuyaRNHomeManagerModule()
 
-@property (nonatomic, strong) TuyaSmartHomeManager *homeManager;
-@property (nonatomic, strong) TuyaSmartRequest *request;
+@property (nonatomic, strong) ThingSmartHomeManager *homeManager;
+@property (nonatomic, strong) ThingSmartRequest *request;
 
 @end
 
@@ -42,7 +42,7 @@ RCT_EXPORT_MODULE(TuyaHomeManagerModule)
  */
 RCT_EXPORT_METHOD(queryHomeList:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
 
-  [self.homeManager getHomeListWithSuccess:^(NSArray<TuyaSmartHomeModel *> *homes) {
+  [self.homeManager getHomeListWithSuccess:^(NSArray<ThingSmartHomeModel *> *homes) {
     
     if (homes.count == 0) {
       if (resolver) {
@@ -52,7 +52,7 @@ RCT_EXPORT_METHOD(queryHomeList:(RCTPromiseResolveBlock)resolver rejecter:(RCTPr
     }
     
     NSMutableArray *list = [NSMutableArray array];
-    for (TuyaSmartHomeModel *homeModel in homes) {
+    for (ThingSmartHomeModel *homeModel in homes) {
       NSDictionary *dic = [homeModel yy_modelToJSONObject];
       NSMutableDictionary *homeDic = [NSMutableDictionary dictionaryWithDictionary:dic];
       [homeDic setObject:[NSNumber numberWithLongLong:homeModel.homeId] forKey:@"homeId"];
@@ -107,8 +107,8 @@ RCT_EXPORT_METHOD(registerTuyaHomeChangeListener:(NSDictionary *)params resolver
     return;
   }
   //开始监听家庭的情况
-  [[TuyaRNHomeManagerListener sharedInstance] registerSmartHomeManager:[TuyaSmartHomeManager new]];
-  [[TuyaRNHomeListener shareInstance] registerHomeChangeWithSmartHome:[TuyaSmartHome homeWithHomeId:homeIdNum.longLongValue]];
+  [[TuyaRNHomeManagerListener sharedInstance] registerSmartHomeManager:[ThingSmartHomeManager new]];
+  [[TuyaRNHomeListener shareInstance] registerHomeChangeWithSmartHome:[ThingSmartHome homeWithHomeId:homeIdNum.longLongValue]];
 }
 
 /**
@@ -127,7 +127,7 @@ RCT_EXPORT_METHOD(unregisterTuyaHomeChangeListener:(NSDictionary *)params resolv
 RCT_EXPORT_METHOD(joinFamily:(NSDictionary *)params resolver:(RCTPromiseResolveBlock)resolver rejecter:(RCTPromiseRejectBlock)rejecter) {
   NSNumber *homeIdNum = params[kTuyaHomeManagerModuleHomeId];
   NSString *action = params[kTuyaHomeManagerModuleAction];
-  TuyaSmartHome *newHome = [TuyaSmartHome homeWithHomeId:homeIdNum.longLongValue];
+  ThingSmartHome *newHome = [ThingSmartHome homeWithHomeId:homeIdNum.longLongValue];
 
   [newHome joinFamilyWithAccept:action.boolValue success:^(BOOL result) {
     [TuyaRNUtils resolverWithHandler:resolver];
@@ -142,16 +142,16 @@ RCT_EXPORT_METHOD(onDestory:(NSDictionary *)params) {
 
 #pragma mark -
 #pragma mark - init
-- (TuyaSmartHomeManager *)homeManager {
+- (ThingSmartHomeManager *)homeManager {
   if (!_homeManager) {
-    _homeManager = [[TuyaSmartHomeManager alloc] init];
+    _homeManager = [[ThingSmartHomeManager alloc] init];
   }
   return _homeManager;
 }
 
-- (TuyaSmartRequest *)request {
+- (ThingSmartRequest *)request {
   if (!_request) {
-    _request = [TuyaSmartRequest new];
+    _request = [ThingSmartRequest new];
   }
   return _request;
 }

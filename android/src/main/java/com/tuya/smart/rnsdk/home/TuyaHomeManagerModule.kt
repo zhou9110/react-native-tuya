@@ -1,14 +1,14 @@
 package com.tuya.smart.rnsdk.home
 
 import com.facebook.react.bridge.*
-import com.tuya.smart.home.sdk.TuyaHomeSdk
-import com.tuya.smart.home.sdk.api.ITuyaHomeChangeListener
-import com.tuya.smart.home.sdk.bean.HomeBean
-import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback
-import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.home.sdk.api.IThingHomeChangeListener
+import com.thingclips.smart.home.sdk.bean.HomeBean
+import com.thingclips.smart.home.sdk.callback.IThingGetHomeListCallback
+import com.thingclips.smart.home.sdk.callback.IThingHomeResultCallback
+import com.thingclips.smart.sdk.bean.DeviceBean
+import com.thingclips.smart.sdk.bean.GroupBean
 import com.tuya.smart.rnsdk.utils.*
-import com.tuya.smart.sdk.bean.DeviceBean
-import com.tuya.smart.sdk.bean.GroupBean
 
 class TuyaHomeManagerModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     override fun getName(): String {
@@ -19,7 +19,7 @@ class TuyaHomeManagerModule(reactContext: ReactApplicationContext) : ReactContex
     /* 获取家庭列表 */
     @ReactMethod
     fun queryHomeList(promise: Promise) {
-        TuyaHomeSdk.getHomeManagerInstance().queryHomeList(object : ITuyaGetHomeListCallback {
+        ThingHomeSdk.getHomeManagerInstance().queryHomeList(object : IThingGetHomeListCallback {
             override fun onSuccess(var1: List<HomeBean>) {
                 promise.resolve(TuyaReactUtils.parseToWritableArray(JsonUtils.toJsonArray(var1!!)))
             }
@@ -39,7 +39,7 @@ class TuyaHomeManagerModule(reactContext: ReactApplicationContext) : ReactContex
             for (index in 0 until length) {
                 list.add((params.getArray(Constant.ROMMS) as ReadableArray).getString(index) as String)
             }
-            TuyaHomeSdk.getHomeManagerInstance().createHome(
+            ThingHomeSdk.getHomeManagerInstance().createHome(
                     params.getString(Constant.NAME),
                     params.getDouble(Constant.LON),
                     params.getDouble(Constant.LAT),
@@ -55,7 +55,7 @@ class TuyaHomeManagerModule(reactContext: ReactApplicationContext) : ReactContex
     @ReactMethod
     fun joinFamily(params: ReadableMap, promise: Promise) {
         if (ReactParamsCheck.checkParams(arrayOf(Constant.HOMEID, Constant.ACTION), params)) {
-            TuyaHomeSdk.getMemberInstance().processInvitation(
+            ThingHomeSdk.getMemberInstance().processInvitation(
                     params.getDouble(Constant.HOMEID).toLong(),
                     params.getBoolean(Constant.ACTION),
                     Constant.getIResultCallback(promise)
@@ -69,7 +69,7 @@ class TuyaHomeManagerModule(reactContext: ReactApplicationContext) : ReactContex
      * 有：家庭的增加、删除、信息变更、分享列表的变更和服务器连接成功的监听 */
     @ReactMethod
     fun registerTuyaHomeChangeListener(params: ReadableMap) {
-        TuyaHomeSdk.getHomeManagerInstance().registerTuyaHomeChangeListener(object : ITuyaHomeChangeListener {
+        ThingHomeSdk.getHomeManagerInstance().registerThingHomeChangeListener(object : IThingHomeChangeListener {
             override fun onHomeInvite(p0: Long, p1: String?) {
                 val map = Arguments.createMap()
                 map.putDouble("homeId", p0.toDouble())
@@ -121,8 +121,8 @@ class TuyaHomeManagerModule(reactContext: ReactApplicationContext) : ReactContex
     }
 
 
-    fun getITuyaHomeResultCallback(promise: Promise): ITuyaHomeResultCallback? {
-        return object : ITuyaHomeResultCallback {
+    fun getITuyaHomeResultCallback(promise: Promise): IThingHomeResultCallback? {
+        return object : IThingHomeResultCallback {
             override fun onSuccess(p0: HomeBean?) {
                 promise.resolve(TuyaReactUtils.parseToWritableMap(p0))
             }

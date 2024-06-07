@@ -1,8 +1,8 @@
 package com.tuya.smart.rnsdk.home
 
 import com.facebook.react.bridge.*
-import com.tuya.smart.home.sdk.TuyaHomeSdk
-import com.tuya.smart.home.sdk.api.ITuyaRoom
+import com.thingclips.smart.home.sdk.ThingHomeSdk
+import com.thingclips.smart.home.sdk.api.IThingRoom
 import com.tuya.smart.rnsdk.utils.Constant.NAME
 import com.tuya.smart.rnsdk.utils.Constant.DEVID
 import com.tuya.smart.rnsdk.utils.Constant.GROUPID
@@ -56,8 +56,8 @@ class TuyaRoomModule(reactContext: ReactApplicationContext) : ReactContextBaseJa
         }
     }
 
-    fun getRoomInstance(roomId: Double): ITuyaRoom {
-        return TuyaHomeSdk.newRoomInstance(roomId.toLong())
+    fun getRoomInstance(roomId: Double): IThingRoom {
+        return ThingHomeSdk.newRoomInstance(roomId.toLong())
     }
 
 }

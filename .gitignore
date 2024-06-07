@@ -45,7 +45,6 @@ gradle
 #
 npm-debug.log
 yarn-error.log
-package-lock.json
 
 # BUCK
 buck-out/
@@ -67,3 +66,5 @@ buck-out/
 *.jsbundle
 *.zip
 *.lock
+!yarn.lock
+!package-lock.json

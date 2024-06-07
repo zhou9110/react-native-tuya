@@ -5,9 +5,6 @@ import com.alibaba.fastjson.JSONArray
 import com.alibaba.fastjson.JSONObject
 import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
-import com.tuya.smart.sdk.bean.DeviceBean
-
-import java.util.ArrayList
 
 object JsonUtils {
     fun parse(json: String, c: Class<*>): Any {

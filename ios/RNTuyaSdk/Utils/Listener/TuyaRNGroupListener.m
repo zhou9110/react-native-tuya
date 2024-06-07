@@ -7,14 +7,14 @@
 //
 
 #import "TuyaRNGroupListener.h"
-#import <TuyaSmartDeviceKit/TuyaSmartShareDeviceModel.h>
-#import <TuyaSmartDeviceKit/TuyaSmartGroup+DpCode.h>
+#import <ThingSmartDeviceKit/ThingSmartShareDeviceModel.h>
+#import <ThingSmartDeviceKit/ThingSmartGroup+DpCode.h>
 #import <YYModel/YYModel.h>
 #import "TuyaRNEventEmitter.h"
 
-@interface TuyaRNGroupListener()<TuyaSmartGroupDelegate>
+@interface TuyaRNGroupListener()<ThingSmartGroupDelegate>
 
-@property (nonatomic, strong) NSMutableArray<TuyaSmartGroup *> *listenGroupArr;
+@property (nonatomic, strong) NSMutableArray<ThingSmartGroup *> *listenGroupArr;
 @end
 
 @implementation TuyaRNGroupListener
@@ -36,10 +36,10 @@
   return self;
 }
 
-+ (void)registerGroup:(TuyaSmartGroup *)group {
++ (void)registerGroup:(ThingSmartGroup *)group {
 
   __block BOOL exist = NO;
-  [[TuyaRNGroupListener shareInstance].listenGroupArr enumerateObjectsUsingBlock:^(TuyaSmartGroup * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+  [[TuyaRNGroupListener shareInstance].listenGroupArr enumerateObjectsUsingBlock:^(ThingSmartGroup * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     if ([obj.groupModel.groupId isEqualToString:group.groupModel.groupId]) {
       exist = YES;
       *stop = YES;
@@ -55,8 +55,8 @@
   }
 }
 
-+ (void)removeDevice:(TuyaSmartGroup *)group {
-  [[[TuyaRNGroupListener shareInstance].listenGroupArr mutableCopy] enumerateObjectsUsingBlock:^(TuyaSmartGroup * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
++ (void)removeDevice:(ThingSmartGroup *)group {
+  [[[TuyaRNGroupListener shareInstance].listenGroupArr mutableCopy] enumerateObjectsUsingBlock:^(ThingSmartGroup * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
     if ([obj.groupModel.groupId isEqualToString:group.groupModel.groupId]) {
       obj.delegate = nil;
       [[TuyaRNGroupListener shareInstance].listenGroupArr removeObject:obj];
@@ -69,7 +69,7 @@
 #pragma mark -
 #pragma mark - TuyaSmartGroupDelegate
 /// 群组dp数据更新
-- (void)group:(TuyaSmartGroup *)group dpsUpdate:(NSDictionary *)dps {
+- (void)group:(ThingSmartGroup *)group dpsUpdate:(NSDictionary *)dps {
   NSDictionary *dic = @{
                         @"devId": group.groupModel.groupId,
                         @"dps": dps,
@@ -80,7 +80,7 @@
 }
 
 /// 群组信息更新
-- (void)groupInfoUpdate:(TuyaSmartGroup *)group {
+- (void)groupInfoUpdate:(ThingSmartGroup *)group {
 
     NSDictionary *dic = @{
                         @"id": group.groupModel.groupId,
@@ -91,7 +91,7 @@
 }
 
 /// 群组移除
-- (void)groupRemove:(TuyaSmartGroup *)group {
+- (void)groupRemove:(ThingSmartGroup *)group {
   NSDictionary *dic = @{
                         @"id": group.groupModel.groupId,
                         @"type": @"onGroupRemoved"
